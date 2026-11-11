@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PokéQuímica: Batalha dos Elementos</title>
+  <title>PokéQuímica: A Batalha dos 118 Elementos</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome -->
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
     tailwind.config = {
@@ -14,24 +14,24 @@
       theme: {
         extend: {
           colors: {
-            blockS: '#e07a5f',
-            blockD: '#f39c12',
-            blockP: '#3498db',
-            blockF: '#9b59b6'
+            blockS: '#10b981', // Verde / Terra & Alcalinos
+            blockD: '#f59e0b', // Laranja-Dourado / Transição Fogo
+            blockP: '#0284c7', // Azul Celeste / Não Metais & Gases
+            blockF: '#a855f7', // Púrpura Cósmico / Lantanídeos e Actinídeos
           },
           animation: {
-            'bounce-slow': 'bounce 2.5s infinite',
-            'pulse-glow': 'pulseGlow 2s infinite ease-in-out',
-            'float': 'float 3s ease-in-out infinite'
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
           },
           keyframes: {
-            pulseGlow: {
-              '0%, 100%': { filter: 'drop-shadow(0 0 10px rgba(243, 156, 18, 0.6))' },
-              '50%': { filter: 'drop-shadow(0 0 25px rgba(243, 156, 18, 0.95))' }
-            },
             float: {
               '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-7px)' }
+              '50%': { transform: 'translateY(-6px)' }
+            },
+            glow: {
+              '0%': { filter: 'drop-shadow(0 0 5px rgba(245, 158, 11, 0.4))' },
+              '100%': { filter: 'drop-shadow(0 0 20px rgba(16, 185, 129, 0.8))' }
             }
           }
         }
@@ -39,65 +39,79 @@
     }
   </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
     body {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
 
     .font-game {
-      font-family: 'Fredoka One', cursive, sans-serif;
+      font-family: 'Fredoka', cursive, sans-serif;
     }
 
-    /* Holographic Foil Card Effect */
-    .card-holo {
+    /* 3D Holo Card Effect */
+    .holo-card {
       position: relative;
       overflow: hidden;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transform-style: preserve-3d;
     }
-    .card-holo::after {
-      content: "";
+    .holo-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.7), 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+    .holo-card::before {
+      content: '';
       position: absolute;
       top: -100%;
       left: -100%;
       width: 300%;
       height: 300%;
-      background: linear-gradient(135deg, 
-        rgba(255,255,255,0) 0%, 
-        rgba(255,255,255,0.08) 25%, 
-        rgba(255,255,255,0.3) 50%, 
-        rgba(255,255,255,0.08) 75%, 
-        rgba(255,255,255,0) 100%);
-      transform: rotate(25deg);
+      background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.05) 70%,
+        transparent 100%
+      );
+      transform: rotate(30deg);
       pointer-events: none;
       transition: transform 0.6s ease;
     }
-    .card-holo:hover::after {
-      transform: rotate(25deg) translate(30%, 30%);
+    .holo-card:hover::before {
+      transform: rotate(30deg) translate(30%, 30%);
     }
 
-    /* Periodic Table Grid Layout */
+    /* Periodic Table Responsive Grid */
     .ptable-grid {
       display: grid;
-      grid-template-columns: repeat(18, minmax(28px, 1fr));
+      grid-template-columns: repeat(18, minmax(36px, 1fr));
+      gap: 3px;
+    }
+    .ptable-f-grid {
+      display: grid;
+      grid-template-columns: repeat(14, minmax(36px, 1fr));
       gap: 3px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .ptable-grid {
-        grid-template-columns: repeat(18, 22px);
+        grid-template-columns: repeat(18, 28px);
+      }
+      .ptable-f-grid {
+        grid-template-columns: repeat(14, 28px);
       }
     }
 
-    /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.8);
     }
     ::-webkit-scrollbar-thumb {
       background: #475569;
@@ -108,319 +122,571 @@
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-900">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
 
-  <!-- TOP APP BAR -->
-  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl px-4 py-3">
+  <!-- HEADER / BARRA SUPERIOR -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl px-4 py-2.5">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <!-- Title & Brand -->
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('album')">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-amber-500/20 ring-2 ring-amber-400/40 animate-pulse-glow">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dex')">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-amber-500/20 ring-2 ring-amber-400/50 animate-glow">
           <i class="fa-solid fa-atom text-white text-xl"></i>
         </div>
         <div>
-          <h1 class="text-xl md:text-2xl font-game tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400">
-            POKÉ-QUÍMICA
-          </h1>
-          <p class="text-xs text-slate-400 hidden sm:block font-medium">Batalhas & Cartas da Tabela Periódica</p>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl md:text-2xl font-game tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-amber-400 to-cyan-400">
+              POKÉ-QUÍMICA
+            </h1>
+            <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded bg-indigo-950 text-indigo-300 border border-indigo-700">118 Elementos</span>
+          </div>
+          <p class="text-xs text-slate-400 font-medium hidden sm:block">A Batalha dos Elementos da Tabela Periódica</p>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
-      <nav class="flex items-center gap-1 sm:gap-2 bg-slate-800/80 p-1 rounded-2xl border border-slate-700/60 shadow-inner">
-        <button id="nav-album" onclick="switchTab('album')" class="tab-btn active px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 bg-amber-500 text-slate-950 shadow-md">
+      <nav class="flex items-center gap-1 bg-slate-800/80 p-1 rounded-2xl border border-slate-700/60 shadow-inner overflow-x-auto max-w-full">
+        <button id="nav-dex" onclick="switchTab('dex')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all duration-200 bg-amber-500 text-slate-950 shadow-md">
           <i class="fa-solid fa-book-sparkles"></i>
-          <span>Elementodéx</span>
+          <span>Elementodéx (118)</span>
         </button>
-        <button id="nav-table" onclick="switchTab('table')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/60">
+        <button id="nav-table" onclick="switchTab('table')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/60">
           <i class="fa-solid fa-table-cells"></i>
-          <span>Tabela Puzzle</span>
+          <span>Tabela 18x7</span>
         </button>
-        <button id="nav-battle" onclick="switchTab('battle')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/60">
+        <button id="nav-battle" onclick="switchTab('battle')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/60">
           <i class="fa-solid fa-shield-halved"></i>
-          <span>Arena Trunfo</span>
+          <span>Super Trunfo</span>
         </button>
-        <button id="nav-quiz" onclick="switchTab('quiz')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/60">
+        <button id="nav-quiz" onclick="switchTab('quiz')" class="tab-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/60">
           <i class="fa-solid fa-circle-question"></i>
-          <span>Quem é Esse?</span>
+          <span>Silhueta Quiz</span>
         </button>
       </nav>
 
-      <!-- Sound & Score Pill -->
+      <!-- Pontuação & Áudio -->
       <div class="flex items-center gap-3">
-        <div class="hidden sm:flex items-center bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-full text-xs font-bold text-amber-400 shadow">
+        <div class="flex items-center bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-black text-amber-400 shadow">
           <i class="fa-solid fa-trophy mr-1.5 text-yellow-500"></i>
-          <span id="player-score">Pts: 0</span>
+          <span id="player-score">0 Pts</span>
         </div>
-        <button id="btn-sound" onclick="toggleAudio()" class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 text-slate-300 hover:text-amber-400 flex items-center justify-center transition hover:scale-105 active:scale-95 shadow">
+        <button id="sound-btn" onclick="toggleAudio()" class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-amber-400 flex items-center justify-center transition hover:scale-105 active:scale-95 shadow">
           <i id="sound-icon" class="fa-solid fa-volume-high"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN WRAPPER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 md:p-6 flex flex-col">
+  <!-- CORPO PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 flex flex-col space-y-6">
 
-    <!-- ========================================== -->
-    <!-- TAB 1: ELEMENTODÉX (ÁLBUM DE CARTAS) -->
-    <!-- ========================================== -->
-    <section id="section-album" class="tab-section flex flex-col space-y-5">
-      <!-- Filter and Info Banner -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 to-slate-800/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-        <div>
-          <h2 class="text-xl sm:text-2xl font-game text-white flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-amber-400 inline-block animate-ping"></span>
-            Álbum de Cartas Elementares
-          </h2>
-          <p class="text-sm text-slate-400 mt-1">
-            Explore os 20 elementos do jogo com seus monstrinhos, símbolos, blocos e fatos químicos do PDF.
-          </p>
+    <!-- ============================================================== -->
+    <!-- ABA 1: ELEMENTODÉX COMPLETO (118 ELEMENTOS) -->
+    <!-- ============================================================== -->
+    <section id="tab-dex" class="tab-content flex flex-col space-y-5">
+      <!-- Painel de Filtros e Busca -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl flex flex-col gap-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-game text-white flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping inline-block"></span>
+              Elementodéx: Todos os 118 Elementos Químicos
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">
+              Filtre por blocos quânticos (s, p, d, f), famílias químicas ou busque por nome, símbolo ou número atômico (Z).
+            </p>
+          </div>
+
+          <!-- Barra de Busca -->
+          <div class="relative w-full md:w-72">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input type="text" id="dex-search" oninput="filterDex()" placeholder="Buscar elemento, Z ou símbolo..."
+              class="w-full bg-slate-950/80 border border-slate-700/80 rounded-2xl pl-10 pr-4 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" />
+          </div>
         </div>
 
-        <!-- Block Badges Filter -->
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="filterDex('ALL')" class="dex-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-900 shadow">Todos (20)</button>
-          <button onclick="filterDex('s')" class="dex-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-900/60 border border-amber-600/60 text-amber-300 hover:bg-amber-600 hover:text-white transition">Bloco S (5)</button>
-          <button onclick="filterDex('d')" class="dex-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-orange-950/60 border border-orange-600/60 text-orange-300 hover:bg-orange-600 hover:text-white transition">Bloco D (5)</button>
-          <button onclick="filterDex('p')" class="dex-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-950/60 border border-sky-600/60 text-sky-300 hover:bg-sky-600 hover:text-white transition">Bloco P (5)</button>
-          <button onclick="filterDex('f')" class="dex-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-950/60 border border-purple-600/60 text-purple-300 hover:bg-purple-600 hover:text-white transition">Bloco F (5)</button>
+        <!-- Botões de Filtros -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-xs">
+          <!-- Filtro por Bloco -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="font-bold text-slate-400 mr-1 uppercase text-[10px]">Blocos:</span>
+            <button onclick="setBlockFilter('all')" class="block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-amber-500 text-slate-950 shadow" data-block="all">Todos (118)</button>
+            <button onclick="setBlockFilter('s')" class="block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-600 hover:text-white transition" data-block="s">Bloco s (14)</button>
+            <button onclick="setBlockFilter('p')" class="block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-sky-950/70 border border-sky-500/50 text-sky-300 hover:bg-sky-600 hover:text-white transition" data-block="p">Bloco p (36)</button>
+            <button onclick="setBlockFilter('d')" class="block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-amber-950/70 border border-amber-500/50 text-amber-300 hover:bg-amber-600 hover:text-white transition" data-block="d">Bloco d (40)</button>
+            <button onclick="setBlockFilter('f')" class="block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-purple-950/70 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white transition" data-block="f">Bloco f (28)</button>
+          </div>
+
+          <!-- Filtro por Família / Categoria -->
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <span class="font-bold text-slate-400 uppercase text-[10px]">Família:</span>
+            <select id="family-filter" onchange="filterDex()" class="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-amber-400">
+              <option value="all">Todas as Famílias</option>
+              <option value="Alcalino">Metais Alcalinos</option>
+              <option value="Alcalino-terroso">Metais Alcalino-Terrosos</option>
+              <option value="Transição">Metais de Transição</option>
+              <option value="Lantanídeo">Lantanídeos</option>
+              <option value="Actinídeo">Actinídeos</option>
+              <option value="Pós-transição">Metais Pós-Transição</option>
+              <option value="Semimetal">Semimetais (Metalóides)</option>
+              <option value="Não-metal">Não-Metais Reativos</option>
+              <option value="Halogênio">Halogênios</option>
+              <option value="Gás Nobre">Gases Nobres</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <!-- Cards Grid -->
-      <div id="dex-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        <!-- Rendered via JS -->
+      <!-- Grid de Cartas -->
+      <div id="dex-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+      <div id="dex-empty" class="hidden text-center py-16 bg-slate-900/40 rounded-3xl border border-slate-800">
+        <i class="fa-solid fa-flask-vial text-4xl text-slate-600 mb-3"></i>
+        <p class="text-sm font-bold text-slate-400">Nenhum elemento químico encontrado para esses filtros.</p>
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 2: TABELA PERIÓDICA PUZZLE -->
-    <!-- ========================================== -->
-    <section id="section-table" class="tab-section hidden flex flex-col space-y-4">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col lg:flex-row items-center justify-between gap-4">
+    <!-- ============================================================== -->
+    <!-- ABA 2: TABELA PERIÓDICA INTERATIVA 18x7 + F-BLOCK -->
+    <!-- ============================================================== -->
+    <section id="tab-table" class="tab-content hidden flex flex-col space-y-4">
+      <!-- Painel de Controle do Modo Tabela -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-lg flex flex-col lg:flex-row items-center justify-between gap-4">
         <div>
           <h2 class="text-xl sm:text-2xl font-game text-white flex items-center gap-2">
-            <i class="fa-solid fa-puzzle-piece text-amber-400"></i> Encaixe na Tabela Periódica
+            <i class="fa-solid fa-table-cells text-amber-400"></i> Grade Completa da Tabela Periódica
           </h2>
           <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
-            Com base na Tabela Periódica vazia da página 10 do PDF! Selecione a carta da sua mão e clique no bloco ou casa correta para pontuar.
+            18 grupos e 7 períodos com lantanídeos e actinídeos destacados. Clique em qualquer célula para inspecionar ou ative o <b>Modo Desafio</b>!
           </p>
         </div>
-        <div class="flex items-center gap-4">
-          <div class="text-right">
-            <div class="text-xs uppercase font-extrabold text-slate-400">Acertos</div>
-            <div class="text-lg font-black text-emerald-400" id="puzzle-progress">0 / 20</div>
-          </div>
-          <button onclick="resetPuzzle()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
-            <i class="fa-solid fa-rotate-right"></i> Reiniciar
+
+        <!-- Modo Desafio / Quiz Tabela -->
+        <div class="flex items-center gap-3">
+          <button id="btn-toggle-challenge" onclick="toggleTableChallenge()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-black rounded-2xl shadow-lg transition transform active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-gamepad"></i>
+            <span id="challenge-btn-label">Ativar Desafio da Tabela</span>
           </button>
         </div>
       </div>
 
-      <!-- Current Card to Place (Deck Tray) -->
-      <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800/80 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+      <!-- Banner do Desafio (aparece quando ativo) -->
+      <div id="table-challenge-banner" class="hidden bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 border-2 border-indigo-500/60 rounded-3xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-            <i class="fa-solid fa-hand-holding mr-1"></i> Carta em mãos:
-          </span>
-          <div id="puzzle-active-card-info" class="text-sm font-semibold text-slate-200">
-            Selecione uma carta da bandeja abaixo ou clique na sugerida!
+          <div class="w-10 h-10 rounded-2xl bg-indigo-600/30 border border-indigo-400 flex items-center justify-center text-indigo-300 font-black text-xl">
+            ?
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-black text-indigo-400 tracking-wider">Desafio de Localização:</span>
+            <div class="text-sm sm:text-base font-bold text-white" id="challenge-prompt">
+              Encontre o elemento: <b class="text-amber-400 text-lg" id="challenge-target-name">Ferro (Fe)</b> - Bloco d
+            </div>
           </div>
         </div>
-        <div class="flex items-center gap-3 overflow-x-auto w-full md:w-auto pb-1 max-w-full" id="puzzle-tray">
-          <!-- Small cards tray rendered via JS -->
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <span class="text-[10px] uppercase font-bold text-slate-400">Acertos / Rodadas</span>
+            <div class="text-base font-black text-emerald-400" id="challenge-score-display">0 / 0</div>
+          </div>
+          <button onclick="skipTableChallenge()" class="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-bold border border-slate-700">
+            Pular
+          </button>
         </div>
       </div>
 
-      <!-- Periodic Table Interactive Board (Page 10 style) -->
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-5 shadow-2xl overflow-x-auto">
-        <!-- Legend -->
-        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mb-4 text-xs font-bold">
-          <div class="flex items-center gap-2">
-            <span class="w-4 h-4 rounded bg-amber-600/70 border border-amber-400/80 shadow"></span>
-            <span class="text-amber-300">Bloco S (Metais Alcalinos / Terrosos)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-4 h-4 rounded bg-orange-600/70 border border-orange-400/80 shadow"></span>
-            <span class="text-orange-300">Bloco D (Metais de Transição)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-4 h-4 rounded bg-sky-600/70 border border-sky-400/80 shadow"></span>
-            <span class="text-sky-300">Bloco P (Não Metais / Representativos)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-4 h-4 rounded bg-purple-600/70 border border-purple-400/80 shadow"></span>
-            <span class="text-purple-300">Bloco F (Lantanídeos & Actinídeos)</span>
-          </div>
+      <!-- Legenda de Cores dos Blocos -->
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-3 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs font-bold">
+        <div class="flex items-center gap-2">
+          <span class="w-3.5 h-3.5 rounded bg-emerald-500/80 border border-emerald-300 shadow"></span>
+          <span class="text-emerald-300">Bloco s (Colunas 1-2 + He)</span>
         </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3.5 h-3.5 rounded bg-amber-500/80 border border-amber-300 shadow"></span>
+          <span class="text-amber-300">Bloco d (Colunas 3-12)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3.5 h-3.5 rounded bg-sky-500/80 border border-sky-300 shadow"></span>
+          <span class="text-sky-300">Bloco p (Colunas 13-18)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3.5 h-3.5 rounded bg-purple-500/80 border border-purple-300 shadow"></span>
+          <span class="text-purple-300">Bloco f (Lantanídeos & Actinídeos)</span>
+        </div>
+      </div>
 
-        <div class="min-w-[700px] flex flex-col items-center select-none py-2">
-          <!-- Main Table 18 cols x 7 rows -->
-          <div id="ptable-container" class="ptable-grid w-full max-w-[960px]">
-            <!-- Generated 18x7 cells via JS -->
+      <!-- Grid da Tabela Periódica Rolável -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-3 sm:p-5 shadow-2xl overflow-x-auto">
+        <div class="min-w-[780px] flex flex-col items-center select-none py-2 space-y-3">
+          <!-- Grade Principal 18 x 7 -->
+          <div id="ptable-main" class="ptable-grid w-full max-w-[1020px]">
+            <!-- Injetado dinamicamente via JS -->
           </div>
 
-          <!-- Bottom Separator for Lanthanides & Actinides (Bloco F) -->
-          <div class="w-full max-w-[960px] flex items-center my-3 px-2">
-            <div class="h-px bg-slate-700/60 flex-1"></div>
-            <span class="text-[11px] font-extrabold uppercase tracking-widest text-purple-400 px-3 bg-slate-900 rounded-full border border-purple-900/50">
-              Bloco F (Terras Raras & Actinídeos)
+          <!-- Separador estilizado -->
+          <div class="w-full max-w-[1020px] flex items-center my-2 px-2">
+            <div class="h-px bg-slate-800 flex-1"></div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-purple-400 px-4 py-0.5 bg-slate-950 rounded-full border border-purple-900/50">
+              Bloco F • Terras Raras & Actinídeos Radioativos
             </span>
-            <div class="h-px bg-slate-700/60 flex-1"></div>
+            <div class="h-px bg-slate-800 flex-1"></div>
           </div>
 
-          <!-- Bloco F Grid (15 cols x 2 rows) -->
-          <div id="ptable-f-container" class="grid grid-cols-[repeat(15,minmax(28px,1fr))] gap-1 w-full max-w-[800px]">
-            <!-- Generated via JS -->
+          <!-- Grade Bloco F (14 colunas x 2 linhas) -->
+          <div id="ptable-f" class="ptable-f-grid w-full max-w-[800px]">
+            <!-- Injetado dinamicamente via JS -->
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 3: ARENA TRUNFO (BATALHA CONTRA O BOT) -->
-    <!-- ========================================== -->
-    <section id="section-battle" class="tab-section hidden flex flex-col space-y-5">
-      <div class="bg-gradient-to-r from-red-950/60 via-slate-900 to-indigo-950/60 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- ============================================================== -->
+    <!-- ABA 3: BATALHA SUPER TRUNFO (JOGADOR VS DR. RUTHERFORD) -->
+    <!-- ============================================================== -->
+    <section id="tab-battle" class="tab-content hidden flex flex-col space-y-5">
+      <div class="bg-gradient-to-r from-red-950/70 via-slate-900 to-indigo-950/70 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
           <h2 class="text-xl sm:text-2xl font-game text-white flex items-center gap-2">
-            <i class="fa-solid fa-swords text-rose-500"></i> Batalha Química: Super Trunfo
+            <i class="fa-solid fa-swords text-rose-500"></i> Arena Super Trunfo: Batalha Elementar
           </h2>
           <p class="text-xs sm:text-sm text-slate-300 mt-1">
-            Escolha um atributo do seu Pokémon Químico. Quem tiver o maior valor (ou menor quando indicado) vence a rodada!
+            Escolha o atributo mais poderoso da sua carta. O monstro com o maior valor vence a rodada!
           </p>
         </div>
-        <div class="flex items-center gap-6 bg-slate-900/80 px-4 py-2 rounded-2xl border border-slate-700">
+        <div class="flex items-center gap-6 bg-slate-900/90 px-5 py-2.5 rounded-2xl border border-slate-700 shadow-inner">
           <div class="text-center">
-            <span class="text-[10px] uppercase font-bold text-cyan-400">Você</span>
-            <div class="text-2xl font-black text-cyan-300" id="battle-user-score">0</div>
+            <span class="text-[10px] uppercase font-black text-cyan-400">Você</span>
+            <div class="text-2xl font-black text-cyan-300" id="battle-player-score">0</div>
           </div>
-          <span class="text-slate-500 font-black text-lg">VS</span>
+          <span class="text-slate-600 font-black text-lg">VS</span>
           <div class="text-center">
-            <span class="text-[10px] uppercase font-bold text-rose-400">Rival Químico</span>
+            <span class="text-[10px] uppercase font-black text-rose-400">Dr. Rutherford</span>
             <div class="text-2xl font-black text-rose-400" id="battle-bot-score">0</div>
           </div>
         </div>
       </div>
 
-      <!-- Duel Arena Field -->
+      <!-- Mesa de Batalha com 2 Cartas -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        <!-- Player Side -->
+        <!-- Jogador -->
         <div class="flex flex-col items-center">
-          <div class="flex items-center justify-between w-full max-w-sm mb-2 px-2">
-            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5 uppercase tracking-wide">
-              <i class="fa-solid fa-user-astronaut"></i> Seu Monstrinho
+          <div class="flex items-center justify-between w-full max-w-sm mb-2 px-2 text-xs">
+            <span class="font-extrabold text-cyan-400 flex items-center gap-1.5 uppercase">
+              <i class="fa-solid fa-user-astronaut"></i> Seu Campeão
             </span>
-            <span class="text-xs text-slate-400 font-semibold" id="player-deck-count">Cartas restantes: 5</span>
+            <span class="text-slate-400 font-semibold" id="battle-player-remaining">Cartas restantes: 5</span>
           </div>
-          <div id="player-battle-card-slot" class="w-full max-w-sm">
-            <!-- Rendered player card with clickable stats -->
+          <div id="battle-player-card" class="w-full max-w-sm">
+            <!-- Renderizado via JS -->
           </div>
         </div>
 
-        <!-- Bot Side -->
+        <!-- Bot IA -->
         <div class="flex flex-col items-center">
-          <div class="flex items-center justify-between w-full max-w-sm mb-2 px-2">
-            <span class="text-xs font-bold text-rose-400 flex items-center gap-1.5 uppercase tracking-wide">
-              <i class="fa-solid fa-robot"></i> Rival Dr. Rutherford
+          <div class="flex items-center justify-between w-full max-w-sm mb-2 px-2 text-xs">
+            <span class="font-extrabold text-rose-400 flex items-center gap-1.5 uppercase">
+              <i class="fa-solid fa-robot"></i> Campeão Rival
             </span>
-            <span class="text-xs text-slate-400 font-semibold" id="bot-deck-count">Cartas restantes: 5</span>
+            <span class="text-slate-400 font-semibold" id="battle-bot-remaining">Cartas restantes: 5</span>
           </div>
-          <div id="bot-battle-card-slot" class="w-full max-w-sm">
-            <!-- Bot Card or Face-down Card -->
+          <div id="battle-bot-card" class="w-full max-w-sm">
+            <!-- Renderizado via JS -->
           </div>
         </div>
       </div>
 
-      <!-- Battle Result Banner & Controls -->
-      <div id="battle-announcement" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center hidden">
-        <h3 id="battle-announcement-text" class="text-lg sm:text-xl font-game text-amber-400">Resultado</h3>
-        <p id="battle-announcement-sub" class="text-xs text-slate-300 mt-1"></p>
-        <button id="battle-next-btn" onclick="nextBattleRound()" class="mt-3 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-xl shadow-lg transition transform active:scale-95 text-sm">
+      <!-- Banner de Resultado da Rodada / Ações -->
+      <div id="battle-round-result" class="bg-slate-900 border-2 border-slate-800 rounded-3xl p-5 text-center hidden shadow-2xl">
+        <h3 id="battle-result-title" class="text-xl font-game text-amber-400">Resultado da Rodada</h3>
+        <p id="battle-result-desc" class="text-xs sm:text-sm text-slate-300 mt-1 max-w-lg mx-auto"></p>
+        <button id="battle-next-btn" onclick="nextBattleTurn()" class="mt-4 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-2xl shadow-lg transition transform active:scale-95 text-xs sm:text-sm">
           Próxima Rodada <i class="fa-solid fa-arrow-right ml-1"></i>
         </button>
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 4: QUEM É ESSE POKÉ-ELEMENTO? (QUIZ) -->
-    <!-- ========================================== -->
-    <section id="section-quiz" class="tab-section hidden flex flex-col space-y-5">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+    <!-- ============================================================== -->
+    <!-- ABA 4: QUEM É ESSE ELEMENTO? (SILHUETA QUIZ) -->
+    <!-- ============================================================== -->
+    <section id="tab-quiz" class="tab-content hidden flex flex-col space-y-5">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h2 class="text-xl sm:text-2xl font-game text-white flex items-center gap-2">
-            <i class="fa-solid fa-question-circle text-amber-400"></i> Quem é esse Elemento?
+            <i class="fa-solid fa-circle-question text-amber-400"></i> Quem é esse Elemento Químico?
           </h2>
           <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
-            Analise a silhueta misteriosa e as 3 propriedades extraídas das cartas do PDF para adivinhar o elemento correto!
+            Descubra o elemento oculto pela silhueta do monstrinho e pelas 3 pistas científicas antes do tempo acabar!
           </p>
         </div>
-        <div class="flex items-center gap-3">
-          <div class="bg-slate-800/80 border border-slate-700/80 px-4 py-2 rounded-xl text-center">
+        <div class="flex items-center gap-4">
+          <div class="bg-slate-800 border border-slate-700 px-4 py-2 rounded-2xl text-center">
             <div class="text-[10px] text-slate-400 font-bold uppercase">Sequência</div>
             <div class="text-xl font-black text-emerald-400" id="quiz-streak">0 🔥</div>
+          </div>
+          <div class="bg-slate-800 border border-slate-700 px-4 py-2 rounded-2xl text-center">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">Tempo</div>
+            <div class="text-xl font-black text-amber-400" id="quiz-timer">15s</div>
           </div>
         </div>
       </div>
 
       <!-- Quiz Body -->
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-slate-900/60 border border-slate-800 rounded-3xl p-5 sm:p-8">
-        <!-- Silhouette & Creature Box -->
-        <div class="md:col-span-5 flex flex-col items-center justify-center p-6 bg-slate-950/70 border border-slate-800 rounded-2xl relative overflow-hidden">
+        <!-- Silhueta -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center p-6 bg-slate-950/80 border border-slate-800 rounded-3xl relative overflow-hidden">
           <div class="w-48 h-48 sm:w-56 sm:h-56 relative flex items-center justify-center">
-            <div id="quiz-creature-container" class="w-full h-full flex items-center justify-center transition-all duration-700">
-              <!-- SVG Monster / Silhouette inserted via JS -->
+            <div id="quiz-creature" class="w-full h-full flex items-center justify-center transition-all duration-700">
+              <!-- SVG da Silhueta -->
             </div>
           </div>
-          <div id="quiz-status-badge" class="mt-4 text-xs font-bold px-4 py-1.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-            Elemento Desconhecido ?
+          <div id="quiz-status" class="mt-4 text-xs font-black px-4 py-1.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+            Elemento Químico Oculto
           </div>
         </div>
 
-        <!-- Clues & 4 Option Buttons -->
+        <!-- Pistas e Alternativas -->
         <div class="md:col-span-7 flex flex-col space-y-4">
-          <div class="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2 flex items-center gap-1.5">
-              <i class="fa-solid fa-clapperboard"></i> Dicas Reveladas da Carta:
+          <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4">
+            <h4 class="text-xs font-black uppercase tracking-wider text-amber-400 mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-lightbulb"></i> Pistas Reveladas do Laboratório:
             </h4>
-            <ul id="quiz-clues-list" class="space-y-2 text-sm text-slate-200">
-              <!-- Clues injected via JS -->
+            <ul id="quiz-clues" class="space-y-2 text-xs sm:text-sm text-slate-200">
+              <!-- Injetado via JS -->
             </ul>
           </div>
 
           <div class="text-xs font-bold text-slate-400 uppercase tracking-wide">
-            Selecione o Pokémon Químico Correto:
+            Selecione o Elemento Correto:
           </div>
 
-          <div id="quiz-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <!-- 4 Button choices injected via JS -->
+          <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 4 opções de resposta -->
           </div>
 
-          <div id="quiz-feedback" class="p-3 rounded-xl text-center text-sm font-bold hidden"></div>
+          <div id="quiz-feedback" class="p-3 rounded-2xl text-center text-xs sm:text-sm font-black hidden"></div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- MODAL DE DETALHES DA CARTA -->
-  <div id="card-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative flex flex-col items-center animate-bounce-slow" style="animation-iteration-count: 1;">
-      <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center">
+  <!-- MODAL DE DETALHES DO ELEMENTO -->
+  <div id="element-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative flex flex-col items-center">
+      <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition">
         <i class="fa-solid fa-xmark"></i>
       </button>
-      <div id="modal-card-content" class="w-full flex justify-center">
-        <!-- Rendered Card preview -->
+      <div id="modal-content" class="w-full flex flex-col items-center">
+        <!-- Preenchido via JS -->
       </div>
     </div>
   </div>
 
-  <!-- AUDIO CONTEXT & SYNTH EFFECT -->
+  <!-- BASE DE DADOS COMPLETA: TODOS OS 118 ELEMENTOS -->
   <script>
-    // Audio synthesis setup using Web Audio API (No external sound files required)
+    // Todos os 118 elementos rigorosamente categorizados com Z=1 até Z=118
+    const RAW_ELEMENTS = [
+      // PERÍODO 1
+      [1, "Hidrogênio", "H", 1.008, "s", 1, 1, "Não-metal", "Gás", "Elemento mais abundante do universo."],
+      [2, "Hélio", "He", 4.0026, "s", 1, 18, "Gás Nobre", "Gás", "Segundo elemento mais leve; não arde."],
+      // PERÍODO 2
+      [3, "Lítio", "Li", 6.94, "s", 2, 1, "Alcalino", "Sólido", "Metal mais leve; usado em baterias de celular."],
+      [4, "Berílio", "Be", 9.0122, "s", 2, 2, "Alcalino-terroso", "Sólido", "Presente em esmeraldas preciosas."],
+      [5, "Boro", "B", 10.81, "p", 2, 13, "Semimetal", "Sólido", "Usado na fabricação de vidros pirex ultra-resistentes."],
+      [6, "Carbono", "C", 12.011, "p", 2, 14, "Não-metal", "Sólido", "Base da vida orgânica; forma grafite e diamante."],
+      [7, "Nitrogênio", "N", 14.007, "p", 2, 15, "Não-metal", "Gás", "Forma 78% do ar que respiramos."],
+      [8, "Oxigênio", "O", 15.999, "p", 2, 16, "Não-metal", "Gás", "Vital para a respiração e combustão terrestre."],
+      [9, "Flúor", "F", 18.998, "p", 2, 17, "Halogênio", "Gás", "Elemento mais eletronegativo e reativo da tabela."],
+      [10, "Neônio", "Ne", 20.180, "p", 2, 18, "Gás Nobre", "Gás", "Famoso pelo brilho avermelhado em letreiros luminosos."],
+      // PERÍODO 3
+      [11, "Sódio", "Na", 22.990, "s", 3, 1, "Alcalino", "Sólido", "Reage violentamente com a água; forma o sal de cozinha."],
+      [12, "Magnésio", "Mg", 24.305, "s", 3, 2, "Alcalino-terroso", "Sólido", "Centro da molécula de clorofila nas plantas."],
+      [13, "Alumínio", "Al", 26.982, "p", 3, 13, "Pós-transição", "Sólido", "Metal leve e resistente amplamente usado em aviões e latas."],
+      [14, "Silício", "Si", 28.085, "p", 3, 14, "Semimetal", "Sólido", "Coração dos chips de computadores e da areia."],
+      [15, "Fósforo", "P", 30.974, "p", 3, 15, "Não-metal", "Sólido", "Presente no DNA, dentes e cabeças de fósforo."],
+      [16, "Enxofre", "S", 32.06, "p", 3, 16, "Não-metal", "Sólido", "Amarelo característico, emitido por vulcões."],
+      [17, "Cloro", "Cl", 35.45, "p", 3, 17, "Halogênio", "Gás", "Purificador essencial para o tratamento de água potável."],
+      [18, "Argônio", "Ar", 39.948, "p", 3, 18, "Gás Nobre", "Gás", "Gás inerte muito usado no interior de lâmpadas incandescentes."],
+      // PERÍODO 4
+      [19, "Potássio", "K", 39.098, "s", 4, 1, "Alcalino", "Sólido", "Fundamental para impulsos nervosos e contração muscular."],
+      [20, "Cálcio", "Ca", 40.078, "s", 4, 2, "Alcalino-terroso", "Sólido", "Elemento principal para a formação de dentes e ossos."],
+      [21, "Escândio", "Sc", 44.956, "d", 4, 3, "Transição", "Sólido", "Usado em ligas ultraleves de bicicletas de competição."],
+      [22, "Titânio", "Ti", 47.867, "d", 4, 4, "Transição", "Sólido", "Tão forte quanto o aço, porém 45% mais leve."],
+      [23, "Vanádio", "V", 50.942, "d", 4, 5, "Transição", "Sólido", "Aumenta drasticamente a dureza do aço em ferramentas."],
+      [24, "Cromo", "Cr", 51.996, "d", 4, 6, "Transição", "Sólido", "Confere brilho prateado e impede a ferrugem no aço inox."],
+      [25, "Manganês", "Mn", 54.938, "d", 4, 7, "Transição", "Sólido", "Essencial na fabricação de trilhos ferroviários e pilhas."],
+      [26, "Ferro", "Fe", 55.845, "d", 4, 8, "Transição", "Sólido", "Base da metalurgia e transportador de oxigênio no sangue."],
+      [27, "Cobalto", "Co", 58.933, "d", 4, 9, "Transição", "Sólido", "Dá cor azul profunda a cerâmicas; presente na vitamina B12."],
+      [28, "Níquel", "Ni", 58.693, "d", 4, 10, "Transição", "Sólido", "Resistente à corrosão; usado em moedas e baterias de carros."],
+      [29, "Cobre", "Cu", 63.546, "d", 4, 11, "Transição", "Sólido", "Excelente condutor de eletricidade em fios e cabos."],
+      [30, "Zinco", "Zn", 65.38, "d", 4, 12, "Transição", "Sólido", "Usado para galvanizar ferro e proteger contra a corrosão."],
+      [31, "Gálio", "Ga", 69.723, "p", 4, 13, "Pós-transição", "Sólido", "Metal fascinante que se derrete com o calor da mão humana."],
+      [32, "Germânio", "Ge", 72.630, "p", 4, 14, "Semimetal", "Sólido", "Primeiro semicondutor a viabilizar os transistores modernos."],
+      [33, "Arsênio", "As", 74.922, "p", 4, 15, "Semimetal", "Sólido", "Historicamente famoso como veneno, hoje usado em lasers."],
+      [34, "Selênio", "Se", 78.971, "p", 4, 16, "Não-metal", "Sólido", "Conduz eletricidade quando iluminado; usado em fotocopiadoras."],
+      [35, "Bromo", "Br", 79.904, "p", 4, 17, "Halogênio", "Líquido", "Único não-metal líquido à temperatura ambiente."],
+      [36, "Criptônio", "Kr", 83.798, "p", 4, 18, "Gás Nobre", "Gás", "Usado em flashes fotográficos ultrarrápidos de alta precisão."],
+      // PERÍODO 5
+      [37, "Rubídio", "Rb", 85.468, "s", 5, 1, "Alcalino", "Sólido", "Usado em relógios atômicos de alta precisão."],
+      [38, "Estrôncio", "Sr", 87.62, "s", 5, 2, "Alcalino-terroso", "Sólido", "Responsável pela cor vermelha brilhante em fogos de artifício."],
+      [39, "Ítrio", "Y", 88.906, "d", 5, 3, "Transição", "Sólido", "Componente crucial de supercondutores de alta temperatura."],
+      [40, "Zircônio", "Zr", 91.224, "d", 5, 4, "Transição", "Sólido", "Suas gemas sintéticas imitam diamantes com perfeição."],
+      [41, "Nióbio", "Nb", 92.906, "d", 5, 5, "Transição", "Sólido", "O Brasil possui as maiores reservas do mundo; fortalece aços."],
+      [42, "Molibdênio", "Mo", 95.95, "d", 5, 6, "Transição", "Sólido", "Suporta temperaturas extremas sem deformar."],
+      [43, "Tecnécio", "Tc", 98.0, "d", 5, 7, "Transição", "Sólido", "Primeiro elemento artificial; amplamente usado na medicina nuclear."],
+      [44, "Rutênio", "Ru", 101.07, "d", 5, 8, "Transição", "Sólido", "Usado para endurecer ligas de platina e contatos elétricos."],
+      [45, "Ródio", "Rh", 102.91, "d", 5, 9, "Transição", "Sólido", "Um dos metais preciosos mais valiosos do planeta terra."],
+      [46, "Paládio", "Pd", 106.42, "d", 5, 10, "Transição", "Sólido", "Capaz de absorver até 900 vezes o seu volume em gás hidrogênio."],
+      [47, "Prata", "Ag", 107.87, "d", 5, 11, "Transição", "Sólido", "Melhor condutor elétrico e térmico de todos os metais."],
+      [48, "Cádmio", "Cd", 112.41, "d", 5, 12, "Transição", "Sólido", "Usado em barreiras de controle para absorver nêutrons nucleares."],
+      [49, "Índio", "In", 114.82, "p", 5, 13, "Pós-transição", "Sólido", "Essencial para as telas touch screen de celulares e monitores."],
+      [50, "Estanho", "Sn", 118.71, "p", 5, 14, "Pós-transição", "Sólido", "Misturado ao cobre formou o Bronze que mudou a história humana."],
+      [51, "Antimônio", "Sb", 121.76, "p", 5, 15, "Semimetal", "Sólido", "Usado na antiguidade como maquiagem e hoje como retardante de fogo."],
+      [52, "Telúrio", "Te", 127.60, "p", 5, 16, "Semimetal", "Sólido", "Batizado em homenagem ao planeta Terra (Tellus)."],
+      [53, "Iodo", "I", 126.90, "p", 5, 17, "Halogênio", "Sólido", "Sublima em vapores violetas; vital para o bom funcionamento da tireoide."],
+      [54, "Xenônio", "Xe", 131.29, "p", 5, 18, "Gás Nobre", "Gás", "Usado como combustível em propulsores iônicos de satélites espaciais."],
+      // PERÍODO 6
+      [55, "Césio", "Cs", 132.91, "s", 6, 1, "Alcalino", "Sólido", "A vibração dos seus átomos define oficialmente o segundo."],
+      [56, "Bário", "Ba", 137.33, "s", 6, 2, "Alcalino-terroso", "Sólido", "Dá a cor verde aos fogos de artifício e é contraste em raios-X."],
+      // Lantanídeos (Bloco F: Z=57 a 71)
+      [57, "Lantânio", "La", 138.91, "f", 6, 3, "Lantanídeo", "Sólido", "Dá nome à série dos lantanídeos; usado em lentes de câmeras."],
+      [58, "Cério", "Ce", 140.12, "f", 6, 3, "Lantanídeo", "Sólido", "Metal de terras raras usado como catalisador automotivo."],
+      [59, "Praseodímio", "Pr", 140.91, "f", 6, 3, "Lantanídeo", "Sólido", "Dá coloração amarela a vidros e óculos de soldadores."],
+      [60, "Neodímio", "Nd", 144.24, "f", 6, 3, "Lantanídeo", "Sólido", "Cria os ímãs permanentes mais poderosos do mundo."],
+      [61, "Promécio", "Pm", 145.0, "f", 6, 3, "Lantanídeo", "Sólido", "Único lantanídeo puramente radioativo; brilha no escuro."],
+      [62, "Samário", "Sm", 150.36, "f", 6, 3, "Lantanídeo", "Sólido", "Ímãs estáveis a temperaturas muito elevadas."],
+      [63, "Európio", "Eu", 151.96, "f", 6, 3, "Lantanídeo", "Sólido", "Usado nas tintas antifalsificação de notas de Euro."],
+      [64, "Gadolínio", "Gd", 157.25, "f", 6, 3, "Lantanídeo", "Sólido", "Utilizado como contraste em ressonâncias magnéticas."],
+      [65, "Térbio", "Tb", 158.93, "f", 6, 3, "Lantanídeo", "Sólido", "Produz o fósforo verde nas telas digitais."],
+      [66, "Disprósio", "Dy", 162.50, "f", 6, 3, "Lantanídeo", "Sólido", "Nome derivado do grego para 'difícil de obter'."],
+      [67, "Hólmio", "Ho", 164.93, "f", 6, 3, "Lantanídeo", "Sólido", "Possui o mais elevado momento magnético entre os elementos."],
+      [68, "Érbio", "Er", 167.26, "f", 6, 3, "Lantanídeo", "Sólido", "Amplifica sinais de luz em cabos de fibra óptica intercontinentais."],
+      [69, "Túlio", "Tm", 168.93, "f", 6, 3, "Lantanídeo", "Sólido", "Um dos elementos de terras raras mais escassos na Terra."],
+      [70, "Itérbio", "Yb", 173.05, "f", 6, 3, "Lantanídeo", "Sólido", "Usado em relógios atômicos ópticos de última geração."],
+      [71, "Lutécio", "Lu", 174.97, "f", 6, 3, "Lantanídeo", "Sólido", "Metal mais denso e duro de todo o grupo dos lantanídeos."],
+      // Bloco D (Período 6)
+      [72, "Háfnio", "Hf", 178.49, "d", 6, 4, "Transição", "Sólido", "Excelente absorvedor de nêutrons em reatores de submarinos."],
+      [73, "Tântalo", "Ta", 180.95, "d", 6, 5, "Transição", "Sólido", "Indispensável para minicapacitores dentro de smartphones."],
+      [74, "Tungstênio", "W", 183.84, "d", 6, 6, "Transição", "Sólido", "Possui o ponto de fusão mais alto de todos os metais: 3.422 °C."],
+      [75, "Rênio", "Re", 186.21, "d", 6, 7, "Transição", "Sólido", "Usado em turbinas a jato de aviões que operam em altíssimo calor."],
+      [76, "Ósmio", "Os", 190.23, "d", 6, 8, "Transição", "Sólido", "A substância natural mais densa da Terra (22.59 g/cm³)."],
+      [77, "Irídio", "Ir", 192.22, "d", 6, 9, "Transição", "Sólido", "A camada que marca a extinção dos dinossauros é rica em Irídio."],
+      [78, "Platina", "Pt", 195.08, "d", 6, 10, "Transição", "Sólido", "Nobre e resistente à oxidação; usada em joias e catalisadores."],
+      [79, "Ouro", "Au", 196.97, "d", 6, 11, "Transição", "Sólido", "Metal mais maleável existente: 1g pode ser esticado em 2 km."],
+      [80, "Mercúrio", "Hg", 200.59, "d", 6, 12, "Transição", "Líquido", "O único metal líquido em condições normais de temperatura."],
+      [81, "Tálio", "Tl", 204.38, "p", 6, 13, "Pós-transição", "Sólido", "Historicamente chamado de veneno dos envenenadores."],
+      [82, "Chumbo", "Pb", 207.2, "p", 6, 14, "Pós-transição", "Sólido", "Metal denso excelente para blindagem contra radiação."],
+      [83, "Bismuto", "Bi", 208.98, "p", 6, 15, "Pós-transição", "Sólido", "Forma cristais geométricos com cores iridescentes espetaculares."],
+      [84, "Polônio", "Po", 209.0, "p", 6, 16, "Pós-transição", "Sólido", "Descoberto por Marie Curie e batizado em honra à Polônia."],
+      [85, "Astato", "At", 210.0, "p", 6, 17, "Halogênio", "Sólido", "O elemento natural mais raro na crosta terrestre."],
+      [86, "Radônio", "Rn", 222.0, "p", 6, 18, "Gás Nobre", "Gás", "Gás radioativo natural emanado pelo decaimento de rochas."],
+      // PERÍODO 7
+      [87, "Frâncio", "Fr", 223.0, "s", 7, 1, "Alcalino", "Sólido", "Extremamente radioativo e reativo; dura poucos minutos."],
+      [88, "Rádio", "Ra", 226.0, "s", 7, 2, "Alcalino-terroso", "Sólido", "Brilha no escuro devido à intensa radioatividade."],
+      // Actinídeos (Bloco F: Z=89 a 103)
+      [89, "Actínio", "Ac", 227.0, "f", 7, 3, "Actinídeo", "Sólido", "Gera um forte brilho azulado no escuro."],
+      [90, "Tório", "Th", 232.04, "f", 7, 3, "Actinídeo", "Sólido", "Grande promessa como combustível nuclear limpo do futuro."],
+      [91, "Protactínio", "Pa", 231.04, "f", 7, 3, "Actinídeo", "Sólido", "Raro e tóxico subproduto da fissão nuclear."],
+      [92, "Urânio", "U", 238.03, "f", 7, 3, "Actinídeo", "Sólido", "Combustível primordial das usinas nucleares globais."],
+      [93, "Netúnio", "Np", 237.0, "f", 7, 3, "Actinídeo", "Sólido", "Primeiro elemento transurânico sintético descoberto."],
+      [94, "Plutônio", "Pu", 244.0, "f", 7, 3, "Actinídeo", "Sólido", "Elemento físsil usado em baterias de sondas espaciais profundas."],
+      [95, "Amerício", "Am", 243.0, "f", 7, 3, "Actinídeo", "Sólido", "Presente em detectores domésticos de fumaça contra incêndios."],
+      [96, "Cúrio", "Cm", 247.0, "f", 7, 3, "Actinídeo", "Sólido", "Homenagem aos cientistas pioneiros Marie e Pierre Curie."],
+      [97, "Berquélio", "Bk", 247.0, "f", 7, 3, "Actinídeo", "Sólido", "Sintetizado pela primeira vez na Universidade de Berkeley."],
+      [98, "Califórnio", "Cf", 251.0, "f", 7, 3, "Actinídeo", "Sólido", "Poderoso emissor de nêutrons; um dos elementos mais caros."],
+      [99, "Einstênio", "Es", 252.0, "f", 7, 3, "Actinídeo", "Sólido", "Batizado em tributo a Albert Einstein."],
+      [100, "Férmio", "Fm", 257.0, "f", 7, 3, "Actinídeo", "Sólido", "Elemento mais pesado que pode ser obtido por bombardeio."],
+      [101, "Mendelévio", "Md", 258.0, "f", 7, 3, "Actinídeo", "Sólido", "Homenagem a Dmitri Mendeleev, pai da tabela periódica."],
+      [102, "Nobélio", "No", 259.0, "f", 7, 3, "Actinídeo", "Sólido", "Nomeado em memória de Alfred Nobel, criador do prêmio Nobel."],
+      [103, "Laurêncio", "Lr", 266.0, "f", 7, 3, "Actinídeo", "Sólido", "Último elemento da série dos actinídeos."],
+      // Transactinídeos Superpesados Bloco D (Período 7)
+      [104, "Rutherfórdio", "Rf", 267.0, "d", 7, 4, "Transição", "Sintético", "Homenagem a Ernest Rutherford, pioneiro da física nuclear."],
+      [105, "Dúbnio", "Db", 268.0, "d", 7, 5, "Transição", "Sintético", "Sintetizado no instituto de pesquisas em Dubna, Rússia."],
+      [106, "Seabórgio", "Sg", 269.0, "d", 7, 6, "Transição", "Sintético", "Primeiro elemento a receber o nome de um cientista vivo."],
+      [107, "Bóhrio", "Bh", 270.0, "d", 7, 7, "Transição", "Sintético", "Tributo ao célebre físico quântico Niels Bohr."],
+      [108, "Hássio", "Hs", 277.0, "d", 7, 8, "Transição", "Sintético", "Recebeu o nome do estado alemão de Hesse."],
+      [109, "Meitnério", "Mt", 278.0, "d", 7, 9, "Transição", "Sintético", "Homenagem a Lise Meitner, pioneira da fissão nuclear."],
+      [110, "Darmstádio", "Ds", 281.0, "d", 7, 10, "Transição", "Sintético", "Sintetizado na cidade de Darmstadt, Alemanha."],
+      [111, "Roentgênio", "Rg", 282.0, "d", 7, 11, "Transição", "Sintético", "Batizado em honra ao descobridor dos raios-X, Wilhelm Röntgen."],
+      [112, "Copernício", "Cn", 285.0, "d", 7, 12, "Transição", "Sintético", "Tributo ao astrônomo Nicolau Copérnico."],
+      // Bloco P Superpesados (Período 7)
+      [113, "Niônio", "Nh", 286.0, "p", 7, 13, "Pós-transição", "Sintético", "Primeiro elemento sintetizado em laboratório no Japão (Nihon)."],
+      [114, "Fleróvio", "Fl", 289.0, "p", 7, 14, "Pós-transição", "Sintético", "Elemento superpesado com estabilidade nuclear prevista."],
+      [115, "Moscóvio", "Mc", 290.0, "p", 7, 15, "Pós-transição", "Sintético", "Homenagem à região de Moscou onde foi gerado."],
+      [116, "Livermório", "Lv", 293.0, "p", 7, 16, "Pós-transição", "Sintético", "Sintetizado com colaboração do Laboratório Lawrence Livermore."],
+      [117, "Tenessino", "Ts", 294.0, "p", 7, 17, "Halogênio", "Sintético", "Segundo halogênio mais pesado já sintetizado na Terra."],
+      [118, "Oganessônio", "Og", 294.0, "p", 7, 18, "Gás Nobre", "Sintético", "Elemento 118, o mais pesado já confirmado oficialmente pela IUPAC."]
+    ];
+
+    // Converter para objetos completos com poderes balanceados e ícones
+    const ELEMENTS = RAW_ELEMENTS.map(item => {
+      const [z, name, sym, mass, block, period, group, family, state, trivia] = item;
+      
+      // Cores por bloco
+      let theme = {
+        bg: 'from-slate-900 to-slate-950',
+        border: 'border-slate-700',
+        badge: 'bg-slate-700 text-white',
+        color: '#64748b'
+      };
+
+      if (block === 's') {
+        theme = {
+          bg: 'from-emerald-950 via-teal-950 to-slate-950',
+          border: 'border-emerald-500',
+          badge: 'bg-emerald-600 text-emerald-100',
+          color: '#10b981'
+        };
+      } else if (block === 'p') {
+        theme = {
+          bg: 'from-sky-950 via-cyan-950 to-slate-950',
+          border: 'border-sky-500',
+          badge: 'bg-sky-600 text-sky-100',
+          color: '#0284c7'
+        };
+      } else if (block === 'd') {
+        theme = {
+          bg: 'from-amber-950 via-orange-950 to-slate-950',
+          border: 'border-amber-500',
+          badge: 'bg-amber-600 text-amber-100',
+          color: '#f59e0b'
+        };
+      } else if (block === 'f') {
+        theme = {
+          bg: 'from-purple-950 via-fuchsia-950 to-slate-950',
+          border: 'border-purple-500',
+          badge: 'bg-purple-600 text-purple-100',
+          color: '#a855f7'
+        };
+      }
+
+      // Atributos de Batalha balanceados
+      const power = Math.min(99, Math.round(40 + (z * 0.45) + (mass % 20)));
+      const reactivity = Math.round(((z * 13) % 75) + 25);
+      const density = +(Math.max(0.09, ((mass / 12) + (z % 8) * 0.8)).toFixed(2));
+
+      return {
+        z,
+        name,
+        sym,
+        mass,
+        block,
+        period,
+        group,
+        family,
+        state,
+        trivia,
+        power,
+        reactivity,
+        density,
+        theme
+      };
+    });
+  </script>
+
+  <!-- MOTOR DE ÁUDIO WEB AUDIO API (100% NATIVO) -->
+  <script>
     let audioCtx = null;
-    let soundEnabled = true;
+    let isSoundOn = true;
 
     function initAudio() {
       if (!audioCtx) {
@@ -432,9 +698,9 @@
     }
 
     function toggleAudio() {
-      soundEnabled = !soundEnabled;
+      isSoundOn = !isSoundOn;
       const icon = document.getElementById('sound-icon');
-      if (soundEnabled) {
+      if (isSoundOn) {
         icon.className = 'fa-solid fa-volume-high';
         playSound('click');
       } else {
@@ -443,7 +709,7 @@
     }
 
     function playSound(type) {
-      if (!soundEnabled) return;
+      if (!isSoundOn) return;
       try {
         initAudio();
         const now = audioCtx.currentTime;
@@ -454,38 +720,52 @@
 
         if (type === 'click') {
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(440, now);
-          osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-          gain.gain.setValueAtTime(0.12, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.06);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.06);
           osc.start(now);
-          osc.stop(now + 0.08);
+          osc.stop(now + 0.06);
         } else if (type === 'correct') {
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(523.25, now); // C5
-          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
-          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
-          osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+          osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+          osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
           gain.gain.setValueAtTime(0.15, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.45);
           osc.start(now);
-          osc.stop(now + 0.5);
+          osc.stop(now + 0.45);
         } else if (type === 'wrong') {
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(220, now);
-          osc.frequency.linearRampToValueAtTime(130, now + 0.3);
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+          osc.frequency.linearRampToValueAtTime(120, now + 0.3);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
           osc.start(now);
-          osc.stop(now + 0.35);
+          osc.stop(now + 0.3);
         } else if (type === 'attack') {
           osc.type = 'square';
-          osc.frequency.setValueAtTime(300, now);
-          osc.frequency.exponentialRampToValueAtTime(900, now + 0.15);
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.exponentialRampToValueAtTime(950, now + 0.15);
           gain.gain.setValueAtTime(0.15, now);
           gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
           osc.start(now);
           osc.stop(now + 0.2);
+        } else if (type === 'fanfare') {
+          const notes = [440, 554, 659, 880];
+          notes.forEach((freq, idx) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.type = 'triangle';
+            o.frequency.setValueAtTime(freq, now + idx * 0.12);
+            g.gain.setValueAtTime(0.15, now + idx * 0.12);
+            g.gain.linearRampToValueAtTime(0.01, now + idx * 0.12 + 0.3);
+            o.start(now + idx * 0.12);
+            o.stop(now + idx * 0.12 + 0.3);
+          });
         }
       } catch (e) {
         console.error("Audio error", e);
@@ -493,1509 +773,709 @@
     }
   </script>
 
-  <!-- GAME DATA & CREATURE SVG DEFINITIONS -->
+  <!-- GERADOR DE AVATAR SVG DE CRIATURAS ELEMENTARES -->
   <script>
-    // All 20 chemical creatures from the PDF with their exact lore, stats and positions
-    const ELEMENTS_DATABASE = [
-      // ----------------- BLOCO D (Páginas 2 e 6) -----------------
-      {
-        id: 'Fe',
-        name: 'Ferro',
-        symbol: 'Fe',
-        atomicNumber: 26,
-        block: 'd',
-        group: 8,
-        period: 4,
-        type: 'Metal de Transição',
-        resistance: 95,
-        reactivity: 45,
-        density: 7.87,
-        power: 88,
-        clues: [
-          'É um metal de transição.',
-          'Possui número atômico 26.',
-          'É muito resistente.',
-          'Pode ser atraído por ímãs.',
-          'Pertence ao bloco D.'
-        ],
-        svgType: 'iron-hound',
-        colorTheme: {
-          bg: 'from-zinc-900 via-stone-800 to-zinc-950',
-          border: 'border-zinc-500',
-          badge: 'bg-zinc-700 text-zinc-100',
-          glow: '#71717a'
-        }
-      },
-      {
-        id: 'Cu',
-        name: 'Cobre',
-        symbol: 'Cu',
-        atomicNumber: 29,
-        block: 'd',
-        group: 11,
-        period: 4,
-        type: 'Metal de Transição',
-        resistance: 78,
-        reactivity: 55,
-        density: 8.96,
-        power: 82,
-        clues: [
-          'É um metal de transição.',
-          'Possui número atômico 29.',
-          'É um excelente condutor de eletricidade.',
-          'É usado em fios elétricos e moedas.',
-          'Pertence ao bloco D.'
-        ],
-        svgType: 'copper-fox',
-        colorTheme: {
-          bg: 'from-amber-950 via-orange-900 to-amber-950',
-          border: 'border-amber-600',
-          badge: 'bg-amber-600 text-amber-100',
-          glow: '#d97706'
-        }
-      },
-      {
-        id: 'Zn',
-        name: 'Zinco',
-        symbol: 'Zn',
-        atomicNumber: 30,
-        block: 'd',
-        group: 12,
-        period: 4,
-        type: 'Metal de Transição',
-        resistance: 72,
-        reactivity: 65,
-        density: 7.14,
-        power: 76,
-        clues: [
-          'É um metal de transição.',
-          'Possui número atômico 30.',
-          'É resistente à corrosão (galvanização).',
-          'É usado na produção de ligas metálicas como latão.',
-          'Pertence ao bloco D.'
-        ],
-        svgType: 'zinc-golem',
-        colorTheme: {
-          bg: 'from-slate-800 via-zinc-800 to-slate-900',
-          border: 'border-slate-400',
-          badge: 'bg-slate-600 text-slate-100',
-          glow: '#94a3b8'
-        }
-      },
-      {
-        id: 'Ni',
-        name: 'Níquel',
-        symbol: 'Ni',
-        atomicNumber: 28,
-        block: 'd',
-        group: 10,
-        period: 4,
-        type: 'Metal de Transição',
-        resistance: 85,
-        reactivity: 50,
-        density: 8.90,
-        power: 84,
-        clues: [
-          'É um metal de transição.',
-          'Possui número atômico 28.',
-          'É resistente à corrosão e brilhante.',
-          'Muito usado em baterias recarregáveis e moedas.',
-          'Pertence ao bloco D.'
-        ],
-        svgType: 'nickel-cat',
-        colorTheme: {
-          bg: 'from-emerald-950 via-teal-900 to-slate-900',
-          border: 'border-emerald-500',
-          badge: 'bg-emerald-700 text-emerald-100',
-          glow: '#10b981'
-        }
-      },
-      {
-        id: 'Cr',
-        name: 'Cromo',
-        symbol: 'Cr',
-        atomicNumber: 24,
-        block: 'd',
-        group: 6,
-        period: 4,
-        type: 'Metal de Transição',
-        resistance: 90,
-        reactivity: 40,
-        density: 7.19,
-        power: 86,
-        clues: [
-          'É um metal de transição.',
-          'Possui número atômico 24.',
-          'Usado para dar cor a metais e vidros decorativos.',
-          'Altamente resistente à oxidação e corrosão.',
-          'Pertence ao bloco D.'
-        ],
-        svgType: 'chrome-prism',
-        colorTheme: {
-          bg: 'from-cyan-950 via-slate-900 to-indigo-950',
-          border: 'border-cyan-400',
-          badge: 'bg-cyan-600 text-white',
-          glow: '#06b6d4'
-        }
-      },
+    // Gera representação visual única e animada em SVG para cada elemento químico
+    function getCreatureSVG(elem, size = 110, isSilhouette = false) {
+      const filter = isSilhouette ? 'filter: brightness(0);' : '';
+      const hue = (elem.z * 137.5) % 360; // Distribuição harmoniosa de cores
 
-      // ----------------- BLOCO S (Páginas 1 e 8) -----------------
-      {
-        id: 'Li',
-        name: 'Lítio',
-        symbol: 'Li',
-        atomicNumber: 3,
-        block: 's',
-        group: 1,
-        period: 2,
-        type: 'Metal Alcalino',
-        resistance: 30,
-        reactivity: 85,
-        density: 0.53,
-        power: 70,
-        clues: [
-          'É um metal alcalino leve e reativo.',
-          'Possui número atômico 3.',
-          'É o metal com a menor densidade (flutua na água!).',
-          'Reage facilmente com a água liberando H2.',
-          'Pertence ao bloco S.'
-        ],
-        svgType: 'lithium-slime',
-        colorTheme: {
-          bg: 'from-teal-950 via-sky-900 to-slate-950',
-          border: 'border-cyan-400',
-          badge: 'bg-cyan-500 text-slate-900',
-          glow: '#22d3ee'
-        }
-      },
-      {
-        id: 'Na',
-        name: 'Sódio',
-        symbol: 'Na',
-        atomicNumber: 11,
-        block: 's',
-        group: 1,
-        period: 3,
-        type: 'Metal Alcalino',
-        resistance: 25,
-        reactivity: 92,
-        density: 0.97,
-        power: 78,
-        clues: [
-          'É um metal mole e altamente reativo.',
-          'Possui número atômico 11.',
-          'Reage violentamente com a água.',
-          'É macio a ponto de ser cortado com faca.',
-          'Pertence ao bloco S.'
-        ],
-        svgType: 'sodium-wisp',
-        colorTheme: {
-          bg: 'from-amber-950 via-yellow-950 to-purple-950',
-          border: 'border-amber-400',
-          badge: 'bg-amber-500 text-slate-950',
-          glow: '#f59e0b'
-        }
-      },
-      {
-        id: 'K',
-        name: 'Potássio',
-        symbol: 'K',
-        atomicNumber: 19,
-        block: 's',
-        group: 1,
-        period: 4,
-        type: 'Metal Alcalino',
-        resistance: 20,
-        reactivity: 96,
-        density: 0.86,
-        power: 80,
-        clues: [
-          'É um metal extremamente reativo e essencial aos vegetais.',
-          'Possui número atômico 19.',
-          'Crucial para contração muscular e impulsos nervosos.',
-          'Reage com água gerando chamas violetas.',
-          'Pertence ao bloco S.'
-        ],
-        svgType: 'potassium-bird',
-        colorTheme: {
-          bg: 'from-yellow-950 via-stone-900 to-amber-900',
-          border: 'border-yellow-600',
-          badge: 'bg-yellow-600 text-slate-900',
-          glow: '#eab308'
-        }
-      },
-      {
-        id: 'Mg',
-        name: 'Magnésio',
-        symbol: 'Mg',
-        atomicNumber: 12,
-        block: 's',
-        group: 2,
-        period: 3,
-        type: 'Metal Alcalino-Terroso',
-        resistance: 60,
-        reactivity: 75,
-        density: 1.74,
-        power: 74,
-        clues: [
-          'É um metal alcalino-terroso.',
-          'Possui número atômico 12.',
-          'Forma uma intensa luz branca ao entrar em combustão.',
-          'Elemento essencial na clorofila e nos ossos humanos.',
-          'Pertence ao bloco S.'
-        ],
-        svgType: 'magnesium-beetle',
-        colorTheme: {
-          bg: 'from-indigo-950 via-slate-900 to-stone-900',
-          border: 'border-indigo-400',
-          badge: 'bg-indigo-600 text-white',
-          glow: '#818cf8'
-        }
-      },
-      {
-        id: 'Ca',
-        name: 'Cálcio',
-        symbol: 'Ca',
-        atomicNumber: 20,
-        block: 's',
-        group: 2,
-        period: 4,
-        type: 'Metal Alcalino-Terroso',
-        resistance: 68,
-        reactivity: 78,
-        density: 1.55,
-        power: 75,
-        clues: [
-          'É um metal alcalino-terroso.',
-          'Possui número atômico 20.',
-          'Principal constituinte estrutural de ossos e dentes.',
-          'Participa diretamente da contração dos músculos.',
-          'Pertence ao bloco S.'
-        ],
-        svgType: 'calcium-armadillo',
-        colorTheme: {
-          bg: 'from-amber-950 via-stone-900 to-stone-950',
-          border: 'border-amber-700',
-          badge: 'bg-amber-700 text-amber-100',
-          glow: '#b45309'
-        }
-      },
-
-      // ----------------- BLOCO P (Páginas 3 e 7) -----------------
-      {
-        id: 'C',
-        name: 'Carbono',
-        symbol: 'C',
-        atomicNumber: 6,
-        block: 'p',
-        group: 14,
-        period: 2,
-        type: 'Não Metal',
-        resistance: 99,
-        reactivity: 60,
-        density: 2.26,
-        power: 92,
-        clues: [
-          'É um não metal do grupo 14.',
-          'Presente na base de todas as formas de vida orgânica.',
-          'Capaz de formar longas cadeias moleculares.',
-          'Pode existir como grafite macio ou como o duro diamante.',
-          'Pertence ao bloco P.'
-        ],
-        svgType: 'carbon-crystal',
-        colorTheme: {
-          bg: 'from-slate-950 via-gray-900 to-slate-900',
-          border: 'border-slate-400',
-          badge: 'bg-slate-700 text-white',
-          glow: '#cbd5e1'
-        }
-      },
-      {
-        id: 'N',
-        name: 'Nitrogênio',
-        symbol: 'N',
-        atomicNumber: 7,
-        block: 'p',
-        group: 15,
-        period: 2,
-        type: 'Não Metal',
-        resistance: 40,
-        reactivity: 70,
-        density: 1.25,
-        power: 80,
-        clues: [
-          'É um não metal gasoso compondo 78% do ar.',
-          'Componente vital de DNA, RNA e proteínas.',
-          'Em estado líquido é usado como criogênico ultragelado.',
-          'Utilizado em fertilizantes agrícolas e explosivos.',
-          'Pertence ao bloco P.'
-        ],
-        svgType: 'nitrogen-spirit',
-        colorTheme: {
-          bg: 'from-sky-950 via-blue-950 to-slate-900',
-          border: 'border-sky-400',
-          badge: 'bg-sky-600 text-white',
-          glow: '#38bdf8'
-        }
-      },
-      {
-        id: 'O',
-        name: 'Oxigênio',
-        symbol: 'O',
-        atomicNumber: 8,
-        block: 'p',
-        group: 16,
-        period: 2,
-        type: 'Não Metal',
-        resistance: 45,
-        reactivity: 94,
-        density: 1.43,
-        power: 89,
-        clues: [
-          'É um não metal vital para a respiração animal.',
-          'Possui número atômico 8 (grupo 16).',
-          'Essencial para qualquer processo de combustão.',
-          'Forma a camada protetora de ozônio (O3).',
-          'Pertence ao bloco P.'
-        ],
-        svgType: 'oxygen-flame',
-        colorTheme: {
-          bg: 'from-blue-950 via-cyan-950 to-teal-950',
-          border: 'border-cyan-400',
-          badge: 'bg-cyan-500 text-slate-950',
-          glow: '#06b6d4'
-        }
-      },
-      {
-        id: 'Al',
-        name: 'Alumínio',
-        symbol: 'Al',
-        atomicNumber: 13,
-        block: 'p',
-        group: 13,
-        period: 3,
-        type: 'Metal Pós-Transição',
-        resistance: 75,
-        reactivity: 68,
-        density: 2.70,
-        power: 81,
-        clues: [
-          'É um metal pós-transição do grupo 13.',
-          'Metal notavelmente leve, dúctil e resistente.',
-          'Forma ligas metálicas resistentes para aviões e veículos.',
-          'Possui número atômico 13.',
-          'Pertence ao bloco P.'
-        ],
-        svgType: 'aluminum-falcon',
-        colorTheme: {
-          bg: 'from-blue-950 via-slate-900 to-indigo-950',
-          border: 'border-blue-400',
-          badge: 'bg-blue-600 text-white',
-          glow: '#60a5fa'
-        }
-      },
-      {
-        id: 'Cl',
-        name: 'Cloro',
-        symbol: 'Cl',
-        atomicNumber: 17,
-        block: 'p',
-        group: 17,
-        period: 3,
-        type: 'Halogênio',
-        resistance: 40,
-        reactivity: 95,
-        density: 3.20,
-        power: 85,
-        clues: [
-          'É um não metal gasoso da família dos halogênios.',
-          'Elemento altamente tóxico e oxidante reativo.',
-          'Muito usado no tratamento e purificação de água.',
-          'Une-se ao Sódio para formar o cloreto de sódio (sal).',
-          'Pertence ao bloco P.'
-        ],
-        svgType: 'chlorine-vapour',
-        colorTheme: {
-          bg: 'from-emerald-950 via-lime-950 to-slate-950',
-          border: 'border-emerald-400',
-          badge: 'bg-emerald-600 text-white',
-          glow: '#34d399'
-        }
-      },
-
-      // ----------------- BLOCO F (Páginas 4, 5 e 9) -----------------
-      {
-        id: 'Ce',
-        name: 'Cério',
-        symbol: 'Ce',
-        atomicNumber: 58,
-        block: 'f',
-        group: 3,
-        period: 6,
-        type: 'Lantanídeo',
-        resistance: 68,
-        reactivity: 72,
-        density: 6.77,
-        power: 83,
-        clues: [
-          'Metal de terras raras da série dos lantanídeos.',
-          'Possui número atômico 58.',
-          'Usado no polimento de vidros e como catalisador automotivo.',
-          'Exibe propriedades catalíticas únicas.',
-          'Pertence ao bloco F.'
-        ],
-        svgType: 'cerium-feline',
-        colorTheme: {
-          bg: 'from-teal-950 via-slate-900 to-emerald-950',
-          border: 'border-teal-400',
-          badge: 'bg-teal-600 text-white',
-          glow: '#2dd4bf'
-        }
-      },
-      {
-        id: 'Nd',
-        name: 'Neodímio',
-        symbol: 'Nd',
-        atomicNumber: 60,
-        block: 'f',
-        group: 3,
-        period: 6,
-        type: 'Lantanídeo',
-        resistance: 70,
-        reactivity: 65,
-        density: 7.01,
-        power: 90,
-        clues: [
-          'É um metal do grupo dos lantanídeos.',
-          'Possui número atômico 60.',
-          'Famoso pela fabricação dos super-ímãs permanentes mais fortes.',
-          'Utilizado para conferir cor a vidros e lasers industriais.',
-          'Pertence ao bloco F.'
-        ],
-        svgType: 'neodymium-cosmic',
-        colorTheme: {
-          bg: 'from-purple-950 via-indigo-950 to-slate-950',
-          border: 'border-purple-500',
-          badge: 'bg-purple-600 text-white',
-          glow: '#a855f7'
-        }
-      },
-      {
-        id: 'Th',
-        name: 'Tório',
-        symbol: 'Th',
-        atomicNumber: 90,
-        block: 'f',
-        group: 3,
-        period: 7,
-        type: 'Actinídeo',
-        resistance: 84,
-        reactivity: 70,
-        density: 11.72,
-        power: 93,
-        clues: [
-          'É um metal da série dos actinídeos.',
-          'Possui número atômico 90.',
-          'Possui radioatividade natural de decaimento lento.',
-          'Potencial combustível limpo em reatores nucleares do futuro.',
-          'Pertence ao bloco F.'
-        ],
-        svgType: 'thorium-scarab',
-        colorTheme: {
-          bg: 'from-amber-950 via-stone-900 to-zinc-950',
-          border: 'border-orange-500',
-          badge: 'bg-orange-700 text-orange-100',
-          glow: '#f97316'
-        }
-      },
-      {
-        id: 'U',
-        name: 'Urânio',
-        symbol: 'U',
-        atomicNumber: 92,
-        block: 'f',
-        group: 3,
-        period: 7,
-        type: 'Actinídeo',
-        resistance: 88,
-        reactivity: 82,
-        density: 19.1,
-        power: 98,
-        clues: [
-          'É um metal actinídeo pesado e altamente denso.',
-          'Número atômico 92.',
-          'Principal combustível das usinas nucleares modernas.',
-          'Elemento com isótopos físseis e radioativos.',
-          'Pertence ao bloco F.'
-        ],
-        svgType: 'uranium-leviathan',
-        colorTheme: {
-          bg: 'from-cyan-950 via-emerald-950 to-slate-950',
-          border: 'border-cyan-400',
-          badge: 'bg-cyan-500 text-slate-950',
-          glow: '#06b6d4'
-        }
-      },
-      {
-        id: 'Pu',
-        name: 'Plutônio',
-        symbol: 'Pu',
-        atomicNumber: 94,
-        block: 'f',
-        group: 3,
-        period: 7,
-        type: 'Actinídeo',
-        resistance: 86,
-        reactivity: 88,
-        density: 19.86,
-        power: 99,
-        clues: [
-          'É um metal actinídeo sintetizado pelo homem.',
-          'Número atômico 94.',
-          'Elemento altamente físsil e radioativo.',
-          'Usado em geradores de sondas espaciais e tecnologia bélica.',
-          'Pertence ao bloco F.'
-        ],
-        svgType: 'plutonium-hydra',
-        colorTheme: {
-          bg: 'from-rose-950 via-purple-950 to-slate-950',
-          border: 'border-rose-500',
-          badge: 'bg-rose-600 text-white',
-          glow: '#f43f5e'
-        }
-      }
-    ];
-
-    // Helper SVG Art generator for each element character
-    function getElementArtwork(svgType, size = 160, isSilhouette = false) {
-      const fillFilter = isSilhouette ? 'filter: brightness(0);' : '';
-      let content = '';
-
-      switch(svgType) {
-        case 'iron-hound':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#3f3f46" stroke="#a1a1aa" stroke-width="4"/>
-            <!-- Cyber dog body & gears -->
-            <path d="M45,110 L70,85 L105,85 L125,100 L115,115 L50,115 Z" fill="#71717a" stroke="#d4d4d8" stroke-width="3"/>
-            <circle cx="100" cy="65" r="24" fill="#a1a1aa" stroke="#e4e4e7" stroke-width="3"/>
-            <!-- Ears & mechanical gear -->
-            <polygon points="108,45 125,30 115,55" fill="#52525b"/>
-            <polygon points="90,45 80,30 85,55" fill="#52525b"/>
-            <circle cx="106" cy="62" r="5" fill="#38bdf8"/>
-            <path d="M40,95 Q25,80 30,60 Q35,75 48,88" fill="none" stroke="#a1a1aa" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="75" cy="95" r="8" fill="#27272a" stroke="#d4d4d8" stroke-width="2"/>
-          `;
-          break;
-        case 'copper-fox':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#7c2d12" stroke="#ea580c" stroke-width="4"/>
-            <!-- Coil fox -->
-            <ellipse cx="80" cy="95" rx="30" ry="22" fill="#c2410c"/>
-            <circle cx="80" cy="65" r="22" fill="#ea580c" stroke="#fed7aa" stroke-width="2"/>
-            <polygon points="65,48 55,25 75,40" fill="#9a3412"/>
-            <polygon points="95,48 105,25 85,40" fill="#9a3412"/>
-            <circle cx="73" cy="63" r="4" fill="#1e1b4b"/>
-            <circle cx="87" cy="63" r="4" fill="#1e1b4b"/>
-            <!-- Electric copper spirals -->
-            <path d="M100,90 Q130,85 125,60 Q115,45 105,75" fill="none" stroke="#fdba74" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="80" cy="73" r="3" fill="#451a03"/>
-          `;
-          break;
-        case 'zinc-golem':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#334155" stroke="#94a3b8" stroke-width="4"/>
-            <!-- Crystal golem beast -->
-            <polygon points="50,110 80,80 110,110 80,125" fill="#64748b" stroke="#cbd5e1" stroke-width="3"/>
-            <polygon points="60,80 80,45 100,80 80,95" fill="#94a3b8" stroke="#f1f5f9" stroke-width="3"/>
-            <polygon points="80,45 65,25 75,40" fill="#cbd5e1"/>
-            <polygon points="80,45 95,25 85,40" fill="#cbd5e1"/>
-            <circle cx="74" cy="68" r="4" fill="#38bdf8"/>
-            <circle cx="86" cy="68" r="4" fill="#38bdf8"/>
-          `;
-          break;
-        case 'nickel-cat':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#064e3b" stroke="#10b981" stroke-width="4"/>
-            <!-- Shiny emerald beast -->
-            <path d="M55,115 C55,85 105,85 105,115" fill="#047857" stroke="#6ee7b7" stroke-width="3"/>
-            <circle cx="80" cy="70" r="25" fill="#10b981"/>
-            <polygon points="62,55 52,32 72,48" fill="#065f46"/>
-            <polygon points="98,55 108,32 88,48" fill="#065f46"/>
-            <!-- Emerald gems on head & tail -->
-            <polygon points="80,50 86,58 80,66 74,58" fill="#a7f3d0"/>
-            <circle cx="72" cy="72" r="4" fill="#064e3b"/>
-            <circle cx="88" cy="72" r="4" fill="#064e3b"/>
-            <path d="M105,105 Q130,95 125,75" fill="none" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
-          `;
-          break;
-        case 'chrome-prism':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#0f172a" stroke="#38bdf8" stroke-width="4"/>
-            <!-- Rainbow crystal dragon head -->
-            <polygon points="80,30 105,65 55,65" fill="#f43f5e" opacity="0.8"/>
-            <polygon points="80,30 120,75 80,85" fill="#38bdf8" opacity="0.8"/>
-            <polygon points="80,30 40,75 80,85" fill="#eab308" opacity="0.8"/>
-            <polygon points="80,85 110,125 50,125" fill="#10b981" opacity="0.8"/>
-            <circle cx="75" cy="75" r="4" fill="#ffffff"/>
-            <circle cx="85" cy="75" r="4" fill="#ffffff"/>
-          `;
-          break;
-        case 'lithium-slime':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#155e75" stroke="#22d3ee" stroke-width="4"/>
-            <!-- Friendly water slime -->
-            <path d="M80,35 C115,35 125,75 125,105 C125,125 35,125 35,105 C35,75 45,35 80,35 Z" fill="#67e8f9" opacity="0.9"/>
-            <circle cx="68" cy="80" r="7" fill="#0e7490"/>
-            <circle cx="92" cy="80" r="7" fill="#0e7490"/>
-            <circle cx="70" cy="78" r="2.5" fill="#ffffff"/>
-            <circle cx="94" cy="78" r="2.5" fill="#ffffff"/>
-            <path d="M72,98 Q80,105 88,98" stroke="#0e7490" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <circle cx="108" cy="55" r="5" fill="#ffffff" opacity="0.7"/>
-          `;
-          break;
-        case 'sodium-wisp':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#451a03" stroke="#f59e0b" stroke-width="4"/>
-            <!-- Fire energy wisp -->
-            <path d="M80,25 Q110,55 95,85 Q115,115 80,135 Q45,115 65,85 Q50,55 80,25 Z" fill="#fbbf24"/>
-            <circle cx="80" cy="80" r="18" fill="#fef08a"/>
-            <circle cx="75" cy="78" r="4" fill="#b45309"/>
-            <circle cx="85" cy="78" r="4" fill="#b45309"/>
-            <path d="M76,90 Q80,95 84,90" stroke="#b45309" stroke-width="2" fill="none"/>
-          `;
-          break;
-        case 'potassium-bird':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#713f12" stroke="#eab308" stroke-width="4"/>
-            <!-- Metallic swift bird -->
-            <ellipse cx="80" cy="85" rx="26" ry="20" fill="#a16207"/>
-            <circle cx="95" cy="65" r="15" fill="#ca8a04"/>
-            <polygon points="108,65 125,68 108,75" fill="#fef08a"/>
-            <circle cx="98" cy="62" r="3.5" fill="#422006"/>
-            <!-- Wing -->
-            <path d="M60,80 L35,55 L75,70 Z" fill="#eab308"/>
-            <path d="M55,90 L25,85 L65,95 Z" fill="#ca8a04"/>
-          `;
-          break;
-        case 'magnesium-beetle':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#1e1b4b" stroke="#818cf8" stroke-width="4"/>
-            <!-- Glowing rainbow beetle -->
-            <ellipse cx="80" cy="90" rx="32" ry="25" fill="#4338ca"/>
-            <circle cx="80" cy="55" r="16" fill="#6366f1"/>
-            <path d="M70,45 Q60,25 45,30" fill="none" stroke="#a5b4fc" stroke-width="3"/>
-            <path d="M90,45 Q100,25 115,30" fill="none" stroke="#a5b4fc" stroke-width="3"/>
-            <circle cx="74" cy="54" r="3" fill="#ffffff"/>
-            <circle cx="86" cy="54" r="3" fill="#ffffff"/>
-            <line x1="80" y1="65" x2="80" y2="115" stroke="#e0e7ff" stroke-width="2"/>
-          `;
-          break;
-        case 'calcium-armadillo':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#292524" stroke="#d97706" stroke-width="4"/>
-            <!-- Armored bone creature -->
-            <ellipse cx="80" cy="90" rx="36" ry="24" fill="#78716c"/>
-            <path d="M50,85 Q80,60 110,85" stroke="#f5f5f4" stroke-width="4" fill="none"/>
-            <path d="M55,95 Q80,75 105,95" stroke="#f5f5f4" stroke-width="4" fill="none"/>
-            <circle cx="105" cy="80" r="14" fill="#a8a29e"/>
-            <circle cx="110" cy="78" r="3" fill="#1c1917"/>
-            <polygon points="118,80 128,83 118,86" fill="#e7e5e4"/>
-          `;
-          break;
-        case 'carbon-crystal':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#020617" stroke="#94a3b8" stroke-width="4"/>
-            <!-- Diamond core spirit -->
-            <polygon points="80,30 115,65 80,130 45,65" fill="#334155" stroke="#f8fafc" stroke-width="2"/>
-            <polygon points="80,30 100,65 80,95 60,65" fill="#64748b"/>
-            <circle cx="73" cy="62" r="3" fill="#38bdf8"/>
-            <circle cx="87" cy="62" r="3" fill="#38bdf8"/>
-          `;
-          break;
-        case 'nitrogen-spirit':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#082f49" stroke="#38bdf8" stroke-width="4"/>
-            <!-- Cryogenic vapor sprite -->
-            <path d="M80,35 C110,40 120,70 100,95 C115,120 70,125 55,105 C40,85 50,55 80,35 Z" fill="#0284c7" opacity="0.85"/>
-            <circle cx="72" cy="70" r="5" fill="#f0f9ff"/>
-            <circle cx="88" cy="70" r="5" fill="#f0f9ff"/>
-            <path d="M60,115 Q80,135 100,115" stroke="#bae6fd" stroke-width="3" fill="none"/>
-          `;
-          break;
-        case 'oxygen-flame':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#0c4a6e" stroke="#38bdf8" stroke-width="4"/>
-            <!-- Aero combustion bird -->
-            <circle cx="80" cy="80" r="28" fill="#38bdf8"/>
-            <ellipse cx="80" cy="80" rx="48" ry="16" fill="none" stroke="#bae6fd" stroke-width="4" transform="rotate(-30 80 80)"/>
-            <circle cx="72" cy="76" r="4" fill="#082f49"/>
-            <circle cx="88" cy="76" r="4" fill="#082f49"/>
-            <path d="M75,90 Q80,95 85,90" stroke="#082f49" stroke-width="2" fill="none"/>
-          `;
-          break;
-        case 'aluminum-falcon':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#172554" stroke="#60a5fa" stroke-width="4"/>
-            <!-- Aerodynamic silver jet falcon -->
-            <polygon points="80,35 125,95 80,85 35,95" fill="#93c5fd" stroke="#eff6ff" stroke-width="3"/>
-            <circle cx="80" cy="65" r="5" fill="#1d4ed8"/>
-          `;
-          break;
-        case 'chlorine-vapour':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#14532d" stroke="#4ade80" stroke-width="4"/>
-            <!-- Toxic haloid dragon -->
-            <path d="M50,110 Q40,65 80,50 Q120,65 110,110 Q80,95 50,110 Z" fill="#22c55e"/>
-            <circle cx="70" cy="68" r="6" fill="#052e16"/>
-            <circle cx="90" cy="68" r="6" fill="#052e16"/>
-            <circle cx="71" cy="66" r="2" fill="#bbf7d0"/>
-            <circle cx="91" cy="66" r="2" fill="#bbf7d0"/>
-          `;
-          break;
-        case 'cerium-feline':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#134e4a" stroke="#2dd4bf" stroke-width="4"/>
-            <!-- Cyber cat with rare earth glow -->
-            <circle cx="80" cy="70" r="26" fill="#14b8a6"/>
-            <polygon points="60,52 50,28 72,44" fill="#0f766e"/>
-            <polygon points="100,52 110,28 88,44" fill="#0f766e"/>
-            <circle cx="72" cy="70" r="4.5" fill="#042f2e"/>
-            <circle cx="88" cy="70" r="4.5" fill="#042f2e"/>
-            <polygon points="80,52 85,60 80,68 75,60" fill="#ccfbf1"/>
-          `;
-          break;
-        case 'neodymium-cosmic':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#3b0764" stroke="#c084fc" stroke-width="4"/>
-            <!-- Magnetic cosmic nebula phantom -->
-            <path d="M80,30 Q110,45 105,75 Q125,100 95,120 Q80,95 65,120 Q35,100 55,75 Q50,45 80,30 Z" fill="#9333ea"/>
-            <circle cx="74" cy="68" r="4" fill="#faf5ff"/>
-            <circle cx="86" cy="68" r="4" fill="#faf5ff"/>
-            <!-- Magnetic field arc -->
-            <path d="M40,50 Q80,15 120,50" fill="none" stroke="#e9d5ff" stroke-width="3" stroke-dasharray="4,4"/>
-          `;
-          break;
-        case 'thorium-scarab':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#292524" stroke="#f97316" stroke-width="4"/>
-            <!-- Nuclear furnace beetle -->
-            <ellipse cx="80" cy="85" rx="34" ry="25" fill="#7c2d12"/>
-            <circle cx="80" cy="55" r="16" fill="#ea580c"/>
-            <line x1="80" y1="65" x2="80" y2="110" stroke="#ffedd5" stroke-width="3"/>
-            <circle cx="75" cy="52" r="3" fill="#fef08a"/>
-            <circle cx="85" cy="52" r="3" fill="#fef08a"/>
-          `;
-          break;
-        case 'uranium-leviathan':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#042f2e" stroke="#22d3ee" stroke-width="4"/>
-            <!-- Sea Dragon Leviathan with green radiation rods -->
-            <path d="M50,120 Q70,70 95,65 Q115,65 110,45 Q90,30 75,45 Q65,65 50,120 Z" fill="#0d9488" stroke="#5eead4" stroke-width="2"/>
-            <circle cx="95" cy="48" r="4" fill="#a7f3d0"/>
-            <polygon points="110,45 125,40 115,55" fill="#2dd4bf"/>
-          `;
-          break;
-        case 'plutonium-hydra':
-          content = `
-            <circle cx="80" cy="80" r="72" fill="#4c0519" stroke="#fb7185" stroke-width="4"/>
-            <!-- Triple reactor dragon hydra -->
-            <path d="M80,125 L80,60" stroke="#f43f5e" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="80" cy="50" r="16" fill="#e11d48"/>
-            <circle cx="50" cy="65" r="12" fill="#be123c"/>
-            <circle cx="110" cy="65" r="12" fill="#be123c"/>
-            <circle cx="78" cy="48" r="2.5" fill="#fff"/>
-            <circle cx="82" cy="48" r="2.5" fill="#fff"/>
-          `;
-          break;
-        default:
-          content = `<circle cx="80" cy="80" r="60" fill="#475569"/>`;
+      let shape = '';
+      if (elem.block === 's') {
+        // Criatura tipo Gota / Esfera viva / Alcalina
+        shape = `
+          <circle cx="60" cy="60" r="48" fill="hsl(${hue}, 80%, 40%)" stroke="#10b981" stroke-width="3" />
+          <path d="M35,65 Q60,15 85,65 Q95,95 60,95 Q25,95 35,65 Z" fill="hsl(${hue}, 85%, 60%)" opacity="0.9"/>
+          <circle cx="48" cy="58" r="5" fill="#fff" />
+          <circle cx="72" cy="58" r="5" fill="#fff" />
+          <circle cx="50" cy="58" r="2.5" fill="#000" />
+          <circle cx="74" cy="58" r="2.5" fill="#000" />
+          <path d="M52,74 Q60,82 68,74" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        `;
+      } else if (elem.block === 'd') {
+        // Criatura blindada / Mecha de Transição
+        shape = `
+          <rect x="20" y="20" width="80" height="80" rx="20" fill="hsl(${hue}, 70%, 35%)" stroke="#f59e0b" stroke-width="3"/>
+          <polygon points="60,25 90,55 60,85 30,55" fill="hsl(${hue}, 80%, 55%)" />
+          <polygon points="60,15 70,30 50,30" fill="#fcd34d" />
+          <circle cx="48" cy="52" r="4" fill="#fff" />
+          <circle cx="72" cy="52" r="4" fill="#fff" />
+          <line x1="40" y1="75" x2="80" y2="75" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/>
+        `;
+      } else if (elem.block === 'p') {
+        // Criatura Alada / Espírito Gasoso / Cristal
+        shape = `
+          <circle cx="60" cy="60" r="46" fill="hsl(${hue}, 75%, 35%)" stroke="#0284c7" stroke-width="3"/>
+          <path d="M60,22 Q95,45 80,85 Q60,105 40,85 Q25,45 60,22 Z" fill="hsl(${hue}, 85%, 60%)" />
+          <!-- Asas -->
+          <path d="M25,55 Q5,35 25,20 Q35,40 25,55 Z" fill="#7dd3fc" opacity="0.8"/>
+          <path d="M95,55 Q115,35 95,20 Q85,40 95,55 Z" fill="#7dd3fc" opacity="0.8"/>
+          <circle cx="50" cy="55" r="4.5" fill="#0284c7" />
+          <circle cx="70" cy="55" r="4.5" fill="#0284c7" />
+          <circle cx="51" cy="54" r="1.5" fill="#fff" />
+          <circle cx="71" cy="54" r="1.5" fill="#fff" />
+        `;
+      } else {
+        // Bloco f: Dragão Quântico / Nebulosa Radioativa
+        shape = `
+          <circle cx="60" cy="60" r="48" fill="hsl(${hue}, 80%, 30%)" stroke="#a855f7" stroke-width="3"/>
+          <path d="M60,15 Q95,30 90,70 Q75,105 60,95 Q45,105 30,70 Q25,30 60,15 Z" fill="hsl(${hue}, 90%, 65%)" />
+          <circle cx="60" cy="60" r="26" fill="none" stroke="#e9d5ff" stroke-width="2" stroke-dasharray="4,4" />
+          <circle cx="48" cy="52" r="5" fill="#fbcfe8" />
+          <circle cx="72" cy="52" r="5" fill="#fbcfe8" />
+          <circle cx="49" cy="52" r="2" fill="#831843" />
+          <circle cx="73" cy="52" r="2" fill="#831843" />
+        `;
       }
 
       return `
-        <svg viewBox="0 0 160 160" width="${size}" height="${size}" class="transition-transform duration-300 drop-shadow-xl" style="${fillFilter}">
-          ${content}
+        <svg viewBox="0 0 120 120" width="${size}" height="${size}" class="transition-transform duration-300 drop-shadow-lg" style="${filter}">
+          ${shape}
         </svg>
-      `;
-    }
-
-    // Helper: Map block to readable Portuguese badge
-    function getBlockBadge(block) {
-      const b = block.toLowerCase();
-      if (b === 's') return '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">Bloco S</span>';
-      if (b === 'd') return '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-orange-500/20 text-orange-300 border border-orange-500/40">Bloco D</span>';
-      if (b === 'p') return '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-sky-500/20 text-sky-300 border border-sky-500/40">Bloco P</span>';
-      if (b === 'f') return '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-purple-500/20 text-purple-300 border border-purple-500/40">Bloco F</span>';
-      return '';
-    }
-
-    // Full Card HTML renderer matching the physical PDF card template
-    function renderCardHTML(elem, isClickable = true, customClass = '') {
-      return `
-        <div class="card-holo group relative bg-gradient-to-b ${elem.colorTheme.bg} border-2 ${elem.colorTheme.border} rounded-3xl p-3.5 shadow-2xl flex flex-col justify-between select-none ${isClickable ? 'cursor-pointer hover:-translate-y-1.5' : ''} ${customClass}" ${isClickable ? `onclick="openCardModal('${elem.id}')"` : ''}>
-          
-          <!-- Top Card Header: Name + Symbol Orb -->
-          <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
-            <div class="flex flex-col">
-              <span class="text-xs uppercase font-extrabold tracking-wider text-slate-300">${elem.type}</span>
-              <h3 class="text-xl font-game text-white tracking-wide">${elem.name}</h3>
-            </div>
-            <div class="w-12 h-12 rounded-2xl bg-black/50 border-2 ${elem.colorTheme.border} flex flex-col items-center justify-center shadow-inner">
-              <span class="text-xs font-bold text-slate-400 leading-none">${elem.atomicNumber}</span>
-              <span class="text-base font-black text-white leading-none">${elem.symbol}</span>
-            </div>
-          </div>
-
-          <!-- Artwork Creature Display -->
-          <div class="relative w-full h-36 bg-black/40 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden my-1">
-            <div class="absolute inset-0 bg-radial from-white/10 to-transparent"></div>
-            ${getElementArtwork(elem.svgType, 120)}
-            <div class="absolute bottom-2 left-2">
-              ${getBlockBadge(elem.block)}
-            </div>
-            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/60 border border-white/10 text-[10px] font-bold text-amber-300">
-              Z = ${elem.atomicNumber}
-            </div>
-          </div>
-
-          <!-- Bullet Lore points directly from the PDF -->
-          <div class="space-y-1.5 my-2 text-xs text-slate-200">
-            ${elem.clues.slice(0, 3).map(clue => `
-              <div class="flex items-start gap-1.5 bg-black/30 p-1.5 rounded-xl border border-white/5">
-                <i class="fa-solid fa-atom text-amber-400 text-[10px] mt-0.5"></i>
-                <span class="line-clamp-1 leading-snug">${clue}</span>
-              </div>
-            `).join('')}
-          </div>
-
-          <!-- Stats Footer / Battle Attribute values -->
-          <div class="grid grid-cols-3 gap-1 pt-2 border-t border-white/10 text-center text-[10px] font-black">
-            <div class="bg-black/40 p-1 rounded-lg">
-              <span class="text-slate-400 block font-normal">Poder</span>
-              <span class="text-amber-400 text-xs">${elem.power}</span>
-            </div>
-            <div class="bg-black/40 p-1 rounded-lg">
-              <span class="text-slate-400 block font-normal">Reativ.</span>
-              <span class="text-cyan-400 text-xs">${elem.reactivity}%</span>
-            </div>
-            <div class="bg-black/40 p-1 rounded-lg">
-              <span class="text-slate-400 block font-normal">Densid.</span>
-              <span class="text-emerald-400 text-xs">${elem.density}</span>
-            </div>
-          </div>
-        </div>
       `;
     }
   </script>
 
-  <!-- GAME LOGIC: TABS, ALBUM, PUZZLE, BATTLE, QUIZ -->
+  <!-- LÓGICA PRINCIPAL DO JOGO -->
   <script>
-    let currentScore = 0;
+    let globalScore = 0;
+    let activeBlockFilter = 'all';
 
-    function addScore(points) {
-      currentScore += points;
+    function addGlobalScore(pts) {
+      globalScore += pts;
       const el = document.getElementById('player-score');
-      if (el) el.innerText = `Pts: ${currentScore}`;
+      if (el) el.innerText = `${globalScore} Pts`;
     }
 
-    // Tab Switching
-    function switchTab(tabId) {
+    // Gerenciador de Abas
+    function switchTab(tabKey) {
       playSound('click');
-      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('bg-amber-500', 'text-slate-950');
         btn.classList.add('text-slate-300');
       });
 
-      const targetSec = document.getElementById(`section-${tabId}`);
-      const targetBtn = document.getElementById(`nav-${tabId}`);
-      if (targetSec && targetBtn) {
-        targetSec.classList.remove('hidden');
+      const targetSection = document.getElementById(`tab-${tabKey}`);
+      const targetBtn = document.getElementById(`nav-${tabKey}`);
+      if (targetSection && targetBtn) {
+        targetSection.classList.remove('hidden');
         targetBtn.classList.add('bg-amber-500', 'text-slate-950');
         targetBtn.classList.remove('text-slate-300');
       }
 
-      if (tabId === 'album') renderAlbum();
-      if (tabId === 'table') initPeriodicPuzzle();
-      if (tabId === 'battle') initBattleMode();
-      if (tabId === 'quiz') startNewQuizQuestion();
+      if (tabKey === 'dex') renderDex();
+      if (tabKey === 'table') renderPeriodicTable();
+      if (tabKey === 'battle') initBattle();
+      if (tabKey === 'quiz') startQuizRound();
     }
 
-    // ==========================================
-    // 1. ALBUM (ELEMENTODÉX)
-    // ==========================================
-    let currentBlockFilter = 'ALL';
+    // ==============================================================
+    // 1. ELEMENTODÉX (118 CARTAS)
+    // ==============================================================
+    function setBlockFilter(block) {
+      playSound('click');
+      activeBlockFilter = block;
+      document.querySelectorAll('.block-filter-btn').forEach(btn => {
+        if (btn.dataset.block === block) {
+          btn.className = "block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-amber-500 text-slate-950 shadow";
+        } else {
+          btn.className = "block-filter-btn px-3 py-1.5 rounded-xl font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+        }
+      });
+      renderDex();
+    }
 
-    function renderAlbum() {
+    function renderDex() {
       const container = document.getElementById('dex-grid');
-      if (!container) return;
-      const filtered = currentBlockFilter === 'ALL' 
-        ? ELEMENTS_DATABASE 
-        : ELEMENTS_DATABASE.filter(e => e.block.toLowerCase() === currentBlockFilter.toLowerCase());
+      const emptyMsg = document.getElementById('dex-empty');
+      const search = document.getElementById('dex-search').value.toLowerCase().trim();
+      const family = document.getElementById('family-filter').value;
 
-      container.innerHTML = filtered.map(elem => renderCardHTML(elem, true)).join('');
+      const filtered = ELEMENTS.filter(elem => {
+        // Filtro por bloco
+        if (activeBlockFilter !== 'all' && elem.block !== activeBlockFilter) return false;
+        // Filtro por família
+        if (family !== 'all' && !elem.family.toLowerCase().includes(family.toLowerCase())) return false;
+        // Busca por texto
+        if (search) {
+          const matchZ = elem.z.toString() === search;
+          const matchSym = elem.sym.toLowerCase().includes(search);
+          const matchName = elem.name.toLowerCase().includes(search);
+          if (!matchZ && !matchSym && !matchName) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+
+      emptyMsg.classList.add('hidden');
+      container.innerHTML = filtered.map(elem => `
+        <div onclick="openModal(${elem.z})" class="holo-card bg-gradient-to-b ${elem.theme.bg} border-2 ${elem.theme.border} rounded-3xl p-3 shadow-xl cursor-pointer flex flex-col justify-between select-none">
+          <!-- Cabeçalho do Card -->
+          <div class="flex items-center justify-between pb-1.5 border-b border-white/10">
+            <div class="flex flex-col">
+              <span class="text-[9px] uppercase font-bold text-slate-400 leading-none">${elem.family}</span>
+              <h3 class="text-sm font-game text-white truncate max-w-[90px]">${elem.name}</h3>
+            </div>
+            <div class="w-8 h-8 rounded-xl bg-black/50 border ${elem.theme.border} flex flex-col items-center justify-center leading-none">
+              <span class="text-[8px] text-slate-400 font-bold">${elem.z}</span>
+              <span class="text-xs font-black text-white">${elem.sym}</span>
+            </div>
+          </div>
+
+          <!-- Arte SVG da Criatura -->
+          <div class="relative w-full h-24 sm:h-28 bg-black/40 rounded-2xl flex items-center justify-center my-1.5 overflow-hidden">
+            ${getCreatureSVG(elem, 80)}
+            <span class="absolute bottom-1.5 left-1.5 text-[8px] uppercase font-black px-1.5 py-0.5 rounded ${elem.theme.badge}">
+              Bloco ${elem.block.toUpperCase()}
+            </span>
+            <span class="absolute bottom-1.5 right-1.5 text-[8px] font-bold text-amber-300 bg-black/60 px-1.5 py-0.5 rounded">
+              P${elem.period} | G${elem.group}
+            </span>
+          </div>
+
+          <!-- Atributos Chave -->
+          <div class="grid grid-cols-3 gap-1 pt-1.5 border-t border-white/10 text-center text-[8px] font-bold">
+            <div class="bg-black/40 p-1 rounded-lg">
+              <span class="text-slate-400 block text-[7px]">Poder</span>
+              <span class="text-amber-400 text-[10px]">${elem.power}</span>
+            </div>
+            <div class="bg-black/40 p-1 rounded-lg">
+              <span class="text-slate-400 block text-[7px]">Reativ.</span>
+              <span class="text-cyan-400 text-[10px]">${elem.reactivity}%</span>
+            </div>
+            <div class="bg-black/40 p-1 rounded-lg">
+              <span class="text-slate-400 block text-[7px]">Massa</span>
+              <span class="text-emerald-400 text-[9px] truncate">${Math.round(elem.mass)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    function filterDex(block) {
-      playSound('click');
-      currentBlockFilter = block;
-      renderAlbum();
+    function filterDex() {
+      renderDex();
     }
 
-    function openCardModal(elemId) {
+    function openModal(z) {
       playSound('click');
-      const elem = ELEMENTS_DATABASE.find(e => e.id === elemId);
+      const elem = ELEMENTS.find(e => e.z === z);
       if (!elem) return;
 
-      const modal = document.getElementById('card-modal');
-      const content = document.getElementById('modal-card-content');
-      
+      const modal = document.getElementById('element-modal');
+      const content = document.getElementById('modal-content');
+
       content.innerHTML = `
-        <div class="w-full max-w-sm">
-          ${renderCardHTML(elem, false)}
-          <div class="mt-4 bg-slate-800/80 p-3 rounded-2xl border border-slate-700 text-xs space-y-1 text-slate-300">
-            <div class="font-bold text-amber-400 mb-1 flex items-center gap-1.5">
-              <i class="fa-solid fa-graduation-cap"></i> Fatos Químicos do PDF:
+        <div class="w-full">
+          <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-3">
+            <div>
+              <span class="text-xs uppercase font-extrabold text-amber-400 tracking-wider">${elem.family} • Bloco ${elem.block.toUpperCase()}</span>
+              <h2 class="text-2xl font-game text-white">${elem.name} (${elem.sym})</h2>
             </div>
-            ${elem.clues.map(c => `<div>• ${c}</div>`).join('')}
+            <div class="w-14 h-14 rounded-2xl bg-black/60 border-2 ${elem.theme.border} flex flex-col items-center justify-center">
+              <span class="text-xs text-slate-400">Z</span>
+              <span class="text-xl font-black text-white">${elem.z}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-center my-3 bg-black/40 rounded-2xl p-4 border border-slate-800">
+            ${getCreatureSVG(elem, 120)}
+          </div>
+
+          <!-- Propriedades Físico-Químicas -->
+          <div class="grid grid-cols-2 gap-2 text-xs mb-3">
+            <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block">Massa Atômica:</span>
+              <span class="text-amber-300 font-bold">${elem.mass} u</span>
+            </div>
+            <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block">Estado Físico:</span>
+              <span class="text-cyan-300 font-bold">${elem.state}</span>
+            </div>
+            <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block">Período / Grupo:</span>
+              <span class="text-emerald-300 font-bold">Período ${elem.period} • Grupo ${elem.group}</span>
+            </div>
+            <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block">Densidade Estimada:</span>
+              <span class="text-purple-300 font-bold">${elem.density} g/cm³</span>
+            </div>
+          </div>
+
+          <!-- Curiosidade Científica -->
+          <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700 text-xs text-slate-200">
+            <b class="text-amber-400 flex items-center gap-1.5 mb-1">
+              <i class="fa-solid fa-flask"></i> Fato Científico:
+            </b>
+            ${elem.trivia}
           </div>
         </div>
       `;
+
       modal.classList.remove('hidden');
     }
 
     function closeModal() {
       playSound('click');
-      const modal = document.getElementById('card-modal');
-      if (modal) modal.classList.add('hidden');
+      document.getElementById('element-modal').classList.add('hidden');
     }
 
-    // ==========================================
-    // 2. PUZZLE DA TABELA PERIÓDICA (Página 10)
-    // ==========================================
-    // Periodic Table Slot Layout Definition (18 cols x 7 rows)
-    const PTABLE_SLOTS = [
-      // Row 1
-      { col: 1, row: 1, z: 1, sym: 'H', block: 's' },
-      { col: 18, row: 1, z: 2, sym: 'He', block: 'p' },
-      // Row 2
-      { col: 1, row: 2, z: 3, sym: 'Li', block: 's' },
-      { col: 2, row: 2, z: 4, sym: 'Be', block: 's' },
-      { col: 13, row: 2, z: 5, sym: 'B', block: 'p' },
-      { col: 14, row: 2, z: 6, sym: 'C', block: 'p' },
-      { col: 15, row: 2, z: 7, sym: 'N', block: 'p' },
-      { col: 16, row: 2, z: 8, sym: 'O', block: 'p' },
-      { col: 17, row: 2, z: 9, sym: 'F', block: 'p' },
-      { col: 18, row: 2, z: 10, sym: 'Ne', block: 'p' },
-      // Row 3
-      { col: 1, row: 3, z: 11, sym: 'Na', block: 's' },
-      { col: 2, row: 3, z: 12, sym: 'Mg', block: 's' },
-      { col: 13, row: 3, z: 13, sym: 'Al', block: 'p' },
-      { col: 14, row: 3, z: 14, sym: 'Si', block: 'p' },
-      { col: 15, row: 3, z: 15, sym: 'P', block: 'p' },
-      { col: 16, row: 3, z: 16, sym: 'S', block: 'p' },
-      { col: 17, row: 3, z: 17, sym: 'Cl', block: 'p' },
-      { col: 18, row: 3, z: 18, sym: 'Ar', block: 'p' },
-      // Row 4
-      { col: 1, row: 4, z: 19, sym: 'K', block: 's' },
-      { col: 2, row: 4, z: 20, sym: 'Ca', block: 's' },
-      { col: 3, row: 4, z: 21, sym: 'Sc', block: 'd' },
-      { col: 4, row: 4, z: 22, sym: 'Ti', block: 'd' },
-      { col: 5, row: 4, z: 23, sym: 'V', block: 'd' },
-      { col: 6, row: 4, z: 24, sym: 'Cr', block: 'd' },
-      { col: 7, row: 4, z: 25, sym: 'Mn', block: 'd' },
-      { col: 8, row: 4, z: 26, sym: 'Fe', block: 'd' },
-      { col: 9, row: 4, z: 27, sym: 'Co', block: 'd' },
-      { col: 10, row: 4, z: 28, sym: 'Ni', block: 'd' },
-      { col: 11, row: 4, z: 29, sym: 'Cu', block: 'd' },
-      { col: 12, row: 4, z: 30, sym: 'Zn', block: 'd' },
-      { col: 13, row: 4, z: 31, sym: 'Ga', block: 'p' },
-      { col: 14, row: 4, z: 32, sym: 'Ge', block: 'p' },
-      { col: 15, row: 4, z: 33, sym: 'As', block: 'p' },
-      { col: 16, row: 4, z: 34, sym: 'Se', block: 'p' },
-      { col: 17, row: 4, z: 35, sym: 'Br', block: 'p' },
-      { col: 18, row: 4, z: 36, sym: 'Kr', block: 'p' },
-      // Row 5, 6, 7 Placeholders for shape fidelity to page 10
-      { col: 1, row: 5, z: 37, sym: 'Rb', block: 's' },
-      { col: 2, row: 5, z: 38, sym: 'Sr', block: 's' },
-      { col: 1, row: 6, z: 55, sym: 'Cs', block: 's' },
-      { col: 2, row: 6, z: 56, sym: 'Ba', block: 's' },
-      { col: 3, row: 6, z: 57, sym: 'La*', block: 'f' },
-      { col: 1, row: 7, z: 87, sym: 'Fr', block: 's' },
-      { col: 2, row: 7, z: 88, sym: 'Ra', block: 's' },
-      { col: 3, row: 7, z: 89, sym: 'Ac**', block: 'f' },
-    ];
+    // ==============================================================
+    // 2. TABELA PERIÓDICA INTERATIVA 18x7 + MODO DESAFIO
+    // ==============================================================
+    let isTableChallengeActive = false;
+    let challengeTarget = null;
+    let challengeWins = 0;
+    let challengeRounds = 0;
 
-    // Bloco F elements row (Lanthanides & Actinides)
-    const PTABLE_F_SLOTS = [
-      // Lanthanides (57-71)
-      { z: 58, sym: 'Ce', block: 'f', period: 6, name: 'Cério' },
-      { z: 59, sym: 'Pr', block: 'f', period: 6 },
-      { z: 60, sym: 'Nd', block: 'f', period: 6, name: 'Neodímio' },
-      { z: 61, sym: 'Pm', block: 'f', period: 6 },
-      { z: 62, sym: 'Sm', block: 'f', period: 6 },
-      { z: 63, sym: 'Eu', block: 'f', period: 6 },
-      { z: 64, sym: 'Gd', block: 'f', period: 6 },
-      { z: 65, sym: 'Tb', block: 'f', period: 6 },
-      { z: 66, sym: 'Dy', block: 'f', period: 6 },
-      { z: 67, sym: 'Ho', block: 'f', period: 6 },
-      { z: 68, sym: 'Er', block: 'f', period: 6 },
-      { z: 69, sym: 'Tm', block: 'f', period: 6 },
-      { z: 70, sym: 'Yb', block: 'f', period: 6 },
-      { z: 71, sym: 'Lu', block: 'f', period: 6 },
-      { z: 72, sym: 'Hf', block: 'd', period: 6 },
-      // Actinides (89-103)
-      { z: 90, sym: 'Th', block: 'f', period: 7, name: 'Tório' },
-      { z: 91, sym: 'Pa', block: 'f', period: 7 },
-      { z: 92, sym: 'U', block: 'f', period: 7, name: 'Urânio' },
-      { z: 93, sym: 'Np', block: 'f', period: 7 },
-      { z: 94, sym: 'Pu', block: 'f', period: 7, name: 'Plutônio' },
-      { z: 95, sym: 'Am', block: 'f', period: 7 },
-      { z: 96, sym: 'Cm', block: 'f', period: 7 },
-      { z: 97, sym: 'Bk', block: 'f', period: 7 },
-      { z: 98, sym: 'Cf', block: 'f', period: 7 },
-      { z: 99, sym: 'Es', block: 'f', period: 7 },
-      { z: 100, sym: 'Fm', block: 'f', period: 7 },
-      { z: 101, sym: 'Md', block: 'f', period: 7 },
-      { z: 102, sym: 'No', block: 'f', period: 7 },
-      { z: 103, sym: 'Lr', block: 'f', period: 7 },
-      { z: 104, sym: 'Rf', block: 'd', period: 7 }
-    ];
+    function renderPeriodicTable() {
+      const mainGrid = document.getElementById('ptable-main');
+      const fGrid = document.getElementById('ptable-f');
+      if (!mainGrid || !fGrid) return;
 
-    let puzzlePlacedElements = new Set();
-    let selectedPuzzleElement = null;
-
-    function initPeriodicPuzzle() {
-      renderPuzzleBoard();
-      renderPuzzleTray();
-      updatePuzzleProgress();
-    }
-
-    function resetPuzzle() {
-      playSound('click');
-      puzzlePlacedElements.clear();
-      selectedPuzzleElement = null;
-      initPeriodicPuzzle();
-    }
-
-    function renderPuzzleTray() {
-      const tray = document.getElementById('puzzle-tray');
-      const info = document.getElementById('puzzle-active-card-info');
-      if (!tray) return;
-
-      const unplaced = ELEMENTS_DATABASE.filter(e => !puzzlePlacedElements.has(e.id));
-
-      if (unplaced.length === 0) {
-        tray.innerHTML = `<span class="text-xs text-emerald-400 font-bold bg-emerald-950/60 border border-emerald-500/40 px-3 py-1.5 rounded-xl"><i class="fa-solid fa-crown mr-1"></i> Parabéns! Você completou toda a Tabela Periódica!</span>`;
-        if (info) info.innerHTML = "Tabela concluída com perfeição!";
-        return;
-      }
-
-      if (!selectedPuzzleElement || puzzlePlacedElements.has(selectedPuzzleElement.id)) {
-        selectedPuzzleElement = unplaced[0];
-      }
-
-      if (info && selectedPuzzleElement) {
-        info.innerHTML = `Encaixe: <b class="text-amber-400">${selectedPuzzleElement.name} (${selectedPuzzleElement.symbol})</b> - Bloco ${selectedPuzzleElement.block.toUpperCase()} | Z=${selectedPuzzleElement.atomicNumber}`;
-      }
-
-      tray.innerHTML = unplaced.map(elem => {
-        const isSelected = selectedPuzzleElement && selectedPuzzleElement.id === elem.id;
-        return `
-          <button onclick="selectPuzzleElement('${elem.id}')" class="flex-shrink-0 px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 shadow-md ${
-            isSelected 
-              ? 'bg-amber-500 text-slate-950 border-white scale-105 ring-2 ring-amber-400' 
-              : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700'
-          }">
-            <span class="w-5 h-5 rounded-md bg-black/40 flex items-center justify-center font-black">${elem.symbol}</span>
-            <span>${elem.name}</span>
-          </button>
-        `;
-      }).join('');
-    }
-
-    function selectPuzzleElement(elemId) {
-      playSound('click');
-      selectedPuzzleElement = ELEMENTS_DATABASE.find(e => e.id === elemId);
-      renderPuzzleTray();
-    }
-
-    function renderPuzzleBoard() {
-      const mainContainer = document.getElementById('ptable-container');
-      const fContainer = document.getElementById('ptable-f-container');
-      if (!mainContainer || !fContainer) return;
-
-      // 18 x 7 grid for main table
+      // Grade 18 x 7
       let mainHTML = '';
       for (let r = 1; r <= 7; r++) {
         for (let c = 1; c <= 18; c++) {
-          const slot = PTABLE_SLOTS.find(s => s.row === r && s.col === c);
-          if (slot) {
-            const isGameElem = ELEMENTS_DATABASE.find(e => e.atomicNumber === slot.z);
-            const isPlaced = isGameElem && puzzlePlacedElements.has(isGameElem.id);
+          // Espaços especiais para lantanídeos e actinídeos na tabela principal
+          if (r === 6 && c === 3) {
+            mainHTML += `
+              <div class="h-10 sm:h-12 border border-purple-500/40 rounded-lg bg-purple-950/40 text-purple-300 flex flex-col items-center justify-center text-[9px] font-black">
+                <span>57-71</span>
+                <span class="text-[7px]">La-Lu</span>
+              </div>
+            `;
+            continue;
+          }
+          if (r === 7 && c === 3) {
+            mainHTML += `
+              <div class="h-10 sm:h-12 border border-purple-500/40 rounded-lg bg-purple-950/40 text-purple-300 flex flex-col items-center justify-center text-[9px] font-black">
+                <span>89-103</span>
+                <span class="text-[7px]">Ac-Lr</span>
+              </div>
+            `;
+            continue;
+          }
 
-            let bgClass = "bg-slate-950/40 border-slate-700/60";
-            if (slot.block === 's') bgClass = "bg-amber-950/20 border-amber-800/40 text-amber-200";
-            if (slot.block === 'd') bgClass = "bg-orange-950/20 border-orange-800/40 text-orange-200";
-            if (slot.block === 'p') bgClass = "bg-sky-950/20 border-sky-800/40 text-sky-200";
-            if (slot.block === 'f') bgClass = "bg-purple-950/20 border-purple-800/40 text-purple-200";
-
-            if (isPlaced) {
-              bgClass = "bg-emerald-600 text-slate-950 font-black border-emerald-300 shadow-lg shadow-emerald-500/30 scale-105 z-10";
-            }
+          // Procurar elemento na posição r, c que não seja bloco F
+          const elem = ELEMENTS.find(e => e.period === r && e.group === c && e.block !== 'f');
+          if (elem) {
+            let bgClass = "bg-slate-900 border-slate-700 text-slate-200";
+            if (elem.block === 's') bgClass = "bg-emerald-950/70 border-emerald-500/50 text-emerald-200 hover:bg-emerald-600 hover:text-white";
+            if (elem.block === 'p') bgClass = "bg-sky-950/70 border-sky-500/50 text-sky-200 hover:bg-sky-600 hover:text-white";
+            if (elem.block === 'd') bgClass = "bg-amber-950/70 border-amber-500/50 text-amber-200 hover:bg-amber-600 hover:text-white";
 
             mainHTML += `
-              <div onclick="handlePuzzleSlotClick(${slot.z}, '${slot.block}')" 
-                   class="h-10 sm:h-12 border rounded-lg flex flex-col items-center justify-center cursor-pointer transition transform active:scale-90 relative ${bgClass}">
-                <span class="text-[8px] sm:text-[9px] text-slate-400 leading-none absolute top-0.5 left-1">${slot.z}</span>
-                <span class="text-xs sm:text-sm font-black leading-none mt-1.5">${isPlaced ? slot.sym : (isGameElem ? '?' : slot.sym)}</span>
+              <div onclick="handleTableCellClick(${elem.z})" class="h-10 sm:h-12 border rounded-lg flex flex-col items-center justify-center cursor-pointer transition transform active:scale-90 relative ${bgClass}">
+                <span class="text-[7px] text-slate-400 absolute top-0.5 left-1">${elem.z}</span>
+                <span class="text-xs font-black leading-none mt-1">${elem.sym}</span>
+                <span class="text-[7px] truncate max-w-[32px] hidden sm:block">${elem.name}</span>
               </div>
             `;
           } else {
-            // Empty space of table
             mainHTML += `<div class="h-10 sm:h-12 pointer-events-none"></div>`;
           }
         }
       }
-      mainContainer.innerHTML = mainHTML;
+      mainGrid.innerHTML = mainHTML;
 
-      // F Block grid
+      // Grade Bloco F (Lantanídeos Z=57 a 71 + Actinídeos Z=89 a 103, total 14 colunas)
+      const lanths = ELEMENTS.filter(e => e.z >= 57 && e.z <= 70);
+      const actins = ELEMENTS.filter(e => e.z >= 89 && e.z <= 102);
+
       let fHTML = '';
-      PTABLE_F_SLOTS.forEach(slot => {
-        const isGameElem = ELEMENTS_DATABASE.find(e => e.atomicNumber === slot.z);
-        const isPlaced = isGameElem && puzzlePlacedElements.has(isGameElem.id);
-
-        let bgClass = "bg-purple-950/30 border-purple-800/50 text-purple-300";
-        if (isPlaced) {
-          bgClass = "bg-emerald-600 text-slate-950 font-black border-emerald-300 shadow-lg shadow-emerald-500/30 scale-105 z-10";
-        }
-
+      [...lanths, ...actins].forEach(elem => {
         fHTML += `
-          <div onclick="handlePuzzleSlotClick(${slot.z}, 'f')"
-               class="h-10 sm:h-12 border rounded-lg flex flex-col items-center justify-center cursor-pointer transition transform active:scale-90 relative ${bgClass}">
-            <span class="text-[8px] sm:text-[9px] text-slate-400 leading-none absolute top-0.5 left-1">${slot.z}</span>
-            <span class="text-xs sm:text-sm font-black leading-none mt-1.5">${isPlaced ? slot.sym : (isGameElem ? '?' : slot.sym)}</span>
+          <div onclick="handleTableCellClick(${elem.z})" class="h-10 sm:h-12 border border-purple-500/50 rounded-lg bg-purple-950/70 text-purple-200 hover:bg-purple-600 hover:text-white flex flex-col items-center justify-center cursor-pointer transition transform active:scale-90 relative">
+            <span class="text-[7px] text-purple-400 absolute top-0.5 left-1">${elem.z}</span>
+            <span class="text-xs font-black leading-none mt-1">${elem.sym}</span>
+            <span class="text-[7px] truncate max-w-[32px] hidden sm:block">${elem.name}</span>
           </div>
         `;
       });
-      fContainer.innerHTML = fHTML;
+      fGrid.innerHTML = fHTML;
     }
 
-    function handlePuzzleSlotClick(atomicNumber, block) {
-      if (!selectedPuzzleElement) return;
+    function toggleTableChallenge() {
+      playSound('click');
+      isTableChallengeActive = !isTableChallengeActive;
+      const banner = document.getElementById('table-challenge-banner');
+      const btnLabel = document.getElementById('challenge-btn-label');
 
-      if (selectedPuzzleElement.atomicNumber === atomicNumber) {
-        // Correct Placement!
-        playSound('correct');
-        puzzlePlacedElements.add(selectedPuzzleElement.id);
-        addScore(100);
-        renderPuzzleBoard();
-        renderPuzzleTray();
-        updatePuzzleProgress();
+      if (isTableChallengeActive) {
+        banner.classList.remove('hidden');
+        btnLabel.innerText = "Desativar Desafio";
+        challengeWins = 0;
+        challengeRounds = 0;
+        nextTableChallengeTarget();
       } else {
-        // Incorrect
-        playSound('wrong');
-        const info = document.getElementById('puzzle-active-card-info');
-        if (info) {
-          info.innerHTML = `<span class="text-rose-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Casa incorreta! Tente olhar o bloco ${selectedPuzzleElement.block.toUpperCase()} e número atômico ${selectedPuzzleElement.atomicNumber}.</span>`;
-        }
+        banner.classList.add('hidden');
+        btnLabel.innerText = "Ativar Desafio da Tabela";
       }
     }
 
-    function updatePuzzleProgress() {
-      const el = document.getElementById('puzzle-progress');
-      if (el) el.innerText = `${puzzlePlacedElements.size} / 20`;
+    function nextTableChallengeTarget() {
+      challengeTarget = ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
+      document.getElementById('challenge-target-name').innerText = `${challengeTarget.name} (${challengeTarget.sym}) - Bloco ${challengeTarget.block.toUpperCase()}`;
+      document.getElementById('challenge-score-display').innerText = `${challengeWins} / ${challengeRounds}`;
     }
 
-    // ==========================================
-    // 3. ARENA TRUNFO (BATALHA CONTRA O BOT)
-    // ==========================================
-    let userDeck = [];
-    let botDeck = [];
-    let currentRoundUserCard = null;
-    let currentRoundBotCard = null;
-    let userScore = 0;
-    let botScore = 0;
-    let roundWaiting = false;
-
-    function shuffle(arr) {
-      return [...arr].sort(() => Math.random() - 0.5);
+    function skipTableChallenge() {
+      playSound('click');
+      challengeRounds++;
+      nextTableChallengeTarget();
     }
 
-    function initBattleMode() {
-      const shuffled = shuffle(ELEMENTS_DATABASE);
-      userDeck = shuffled.slice(0, 5);
-      botDeck = shuffled.slice(5, 10);
-      userScore = 0;
-      botScore = 0;
-      roundWaiting = false;
+    function handleTableCellClick(z) {
+      if (isTableChallengeActive) {
+        challengeRounds++;
+        if (z === challengeTarget.z) {
+          playSound('correct');
+          challengeWins++;
+          addGlobalScore(80);
+          nextTableChallengeTarget();
+        } else {
+          playSound('wrong');
+          document.getElementById('challenge-score-display').innerText = `${challengeWins} / ${challengeRounds}`;
+        }
+      } else {
+        openModal(z);
+      }
+    }
 
-      document.getElementById('battle-user-score').innerText = '0';
+    // ==============================================================
+    // 3. BATALHA SUPER TRUNFO
+    // ==============================================================
+    let playerBattleDeck = [];
+    let botBattleDeck = [];
+    let currentRoundPlayer = null;
+    let currentRoundBot = null;
+    let pScore = 0;
+    let bScore = 0;
+    let isRoundLocked = false;
+
+    function initBattle() {
+      // Embaralha os 118 elementos e dá 5 cartas para cada
+      const shuffled = [...ELEMENTS].sort(() => Math.random() - 0.5);
+      playerBattleDeck = shuffled.slice(0, 5);
+      botBattleDeck = shuffled.slice(5, 10);
+      pScore = 0;
+      bScore = 0;
+      isRoundLocked = false;
+
+      document.getElementById('battle-player-score').innerText = '0';
       document.getElementById('battle-bot-score').innerText = '0';
-      document.getElementById('battle-announcement').classList.add('hidden');
+      document.getElementById('battle-round-result').classList.add('hidden');
 
-      loadNextBattleCards();
+      loadBattleTurn();
     }
 
-    function loadNextBattleCards() {
-      if (userDeck.length === 0 || botDeck.length === 0) {
-        endBattleGame();
+    function loadBattleTurn() {
+      if (playerBattleDeck.length === 0 || botBattleDeck.length === 0) {
+        finishBattleGame();
         return;
       }
 
-      currentRoundUserCard = userDeck.pop();
-      currentRoundBotCard = botDeck.pop();
-      roundWaiting = false;
+      currentRoundPlayer = playerBattleDeck.pop();
+      currentRoundBot = botBattleDeck.pop();
+      isRoundLocked = false;
 
-      document.getElementById('player-deck-count').innerText = `Cartas restantes: ${userDeck.length + 1}`;
-      document.getElementById('bot-deck-count').innerText = `Cartas restantes: ${botDeck.length + 1}`;
-      document.getElementById('battle-announcement').classList.add('hidden');
+      document.getElementById('battle-player-remaining').innerText = `Cartas restantes: ${playerBattleDeck.length + 1}`;
+      document.getElementById('battle-bot-remaining').innerText = `Cartas restantes: ${botBattleDeck.length + 1}`;
+      document.getElementById('battle-round-result').classList.add('hidden');
 
-      renderPlayerBattleCard(currentRoundUserCard);
-      renderBotBattleCard(null); // Face down until stat selected
+      renderPlayerBattleCard();
+      renderBotBattleCard(false);
     }
 
-    function renderPlayerBattleCard(elem) {
-      const slot = document.getElementById('player-battle-card-slot');
-      if (!slot) return;
+    function renderPlayerBattleCard() {
+      const slot = document.getElementById('battle-player-card');
+      const elem = currentRoundPlayer;
 
       slot.innerHTML = `
-        <div class="card-holo bg-gradient-to-b ${elem.colorTheme.bg} border-2 border-cyan-400 rounded-3xl p-4 shadow-2xl flex flex-col justify-between">
+        <div class="holo-card bg-gradient-to-b ${elem.theme.bg} border-2 border-cyan-400 rounded-3xl p-4 shadow-2xl flex flex-col justify-between">
           <div class="flex items-center justify-between border-b border-white/10 pb-2">
             <div>
               <span class="text-xs uppercase font-extrabold text-cyan-300">Sua Carta</span>
               <h3 class="text-xl font-game text-white">${elem.name}</h3>
             </div>
             <div class="w-11 h-11 rounded-2xl bg-black/60 border border-cyan-400 flex flex-col items-center justify-center">
-              <span class="text-[10px] text-slate-400">${elem.atomicNumber}</span>
-              <span class="text-base font-black text-white">${elem.symbol}</span>
+              <span class="text-[9px] text-slate-400">Z</span>
+              <span class="text-base font-black text-white">${elem.z}</span>
             </div>
           </div>
 
-          <div class="h-32 bg-black/40 rounded-2xl flex items-center justify-center my-2 relative">
-            ${getElementArtwork(elem.svgType, 100)}
-            <div class="absolute bottom-2 left-2">${getBlockBadge(elem.block)}</div>
+          <div class="h-28 bg-black/40 rounded-2xl flex items-center justify-center my-2 relative">
+            ${getCreatureSVG(elem, 90)}
+            <span class="absolute bottom-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded bg-black/60 text-cyan-300">
+              Bloco ${elem.block.toUpperCase()}
+            </span>
           </div>
 
-          <!-- Clickable Stats to Attack -->
-          <div class="space-y-2 mt-2">
-            <button onclick="playStatRound('atomicNumber')" class="w-full bg-slate-900/90 hover:bg-cyan-500 hover:text-slate-950 border border-slate-700 hover:border-cyan-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
+          <!-- Atributos Clicáveis para Duelo -->
+          <div class="space-y-1.5 mt-2">
+            <button onclick="playBattleStat('z')" class="w-full bg-slate-900/90 hover:bg-cyan-500 hover:text-slate-950 border border-slate-700 hover:border-cyan-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
               <span class="flex items-center gap-1.5"><i class="fa-solid fa-atom text-cyan-400 group-hover:text-slate-950"></i> Nº Atômico (Z):</span>
-              <span class="text-sm font-black">${elem.atomicNumber}</span>
+              <span class="text-sm font-black">${elem.z}</span>
             </button>
-            <button onclick="playStatRound('power')" class="w-full bg-slate-900/90 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 hover:border-amber-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
+            <button onclick="playBattleStat('power')" class="w-full bg-slate-900/90 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 hover:border-amber-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
               <span class="flex items-center gap-1.5"><i class="fa-solid fa-fire text-amber-400 group-hover:text-slate-950"></i> Força Elementar:</span>
               <span class="text-sm font-black">${elem.power}</span>
             </button>
-            <button onclick="playStatRound('reactivity')" class="w-full bg-slate-900/90 hover:bg-emerald-500 hover:text-slate-950 border border-slate-700 hover:border-emerald-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
+            <button onclick="playBattleStat('reactivity')" class="w-full bg-slate-900/90 hover:bg-emerald-500 hover:text-slate-950 border border-slate-700 hover:border-emerald-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
               <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-emerald-400 group-hover:text-slate-950"></i> Reatividade Química:</span>
               <span class="text-sm font-black">${elem.reactivity}%</span>
             </button>
-            <button onclick="playStatRound('density')" class="w-full bg-slate-900/90 hover:bg-purple-500 hover:text-slate-950 border border-slate-700 hover:border-purple-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-weight-hanging text-purple-400 group-hover:text-slate-950"></i> Densidade (g/cm³):</span>
-              <span class="text-sm font-black">${elem.density}</span>
+            <button onclick="playBattleStat('mass')" class="w-full bg-slate-900/90 hover:bg-purple-500 hover:text-slate-950 border border-slate-700 hover:border-purple-400 py-2 px-3 rounded-xl flex items-center justify-between text-xs font-bold transition group">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-weight-hanging text-purple-400 group-hover:text-slate-950"></i> Massa Atômica:</span>
+              <span class="text-sm font-black">${elem.mass} u</span>
             </button>
           </div>
         </div>
       `;
     }
 
-    function renderBotBattleCard(elem) {
-      const slot = document.getElementById('bot-battle-card-slot');
-      if (!slot) return;
+    function renderBotBattleCard(revealed) {
+      const slot = document.getElementById('battle-bot-card');
+      const elem = currentRoundBot;
 
-      if (!elem) {
-        // Face-down mysterious pokéball style back
+      if (!revealed) {
         slot.innerHTML = `
           <div class="h-80 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 border-2 border-dashed border-rose-500/50 rounded-3xl p-5 shadow-2xl flex flex-col items-center justify-center text-center">
-            <div class="w-24 h-24 rounded-full bg-rose-600/20 border-2 border-rose-500 flex items-center justify-center text-rose-400 text-3xl animate-pulse">
-              <i class="fa-solid fa-flask-round-potion"></i>
+            <div class="w-20 h-20 rounded-full bg-rose-600/20 border-2 border-rose-500 flex items-center justify-center text-rose-400 text-3xl animate-pulse">
+              <i class="fa-solid fa-flask"></i>
             </div>
-            <h4 class="text-lg font-game text-slate-300 mt-4">Carta Oculta do Rival</h4>
-            <p class="text-xs text-slate-500 mt-1 max-w-[200px]">Escolha um atributo do seu monstrinho à esquerda para duelar!</p>
+            <h4 class="text-lg font-game text-slate-300 mt-4">Elemento do Rival Oculto</h4>
+            <p class="text-xs text-slate-500 mt-1 max-w-[200px]">Selecione um atributo à esquerda para confrontar o Dr. Rutherford!</p>
           </div>
         `;
       } else {
-        // Face-up revealed card
-        slot.innerHTML = renderCardHTML(elem, false, 'border-rose-500');
+        slot.innerHTML = `
+          <div class="holo-card bg-gradient-to-b ${elem.theme.bg} border-2 border-rose-500 rounded-3xl p-4 shadow-2xl flex flex-col justify-between">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+              <div>
+                <span class="text-xs uppercase font-extrabold text-rose-400">Carta Rival</span>
+                <h3 class="text-xl font-game text-white">${elem.name}</h3>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-black/60 border border-rose-500 flex flex-col items-center justify-center">
+                <span class="text-[9px] text-slate-400">Z</span>
+                <span class="text-base font-black text-white">${elem.z}</span>
+              </div>
+            </div>
+
+            <div class="h-28 bg-black/40 rounded-2xl flex items-center justify-center my-2 relative">
+              ${getCreatureSVG(elem, 90)}
+              <span class="absolute bottom-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded bg-black/60 text-rose-300">
+                Bloco ${elem.block.toUpperCase()}
+              </span>
+            </div>
+
+            <div class="space-y-1.5 mt-2 text-xs font-bold text-slate-300">
+              <div class="bg-black/40 p-2 rounded-xl flex justify-between">
+                <span>Nº Atômico (Z):</span> <span class="text-white">${elem.z}</span>
+              </div>
+              <div class="bg-black/40 p-2 rounded-xl flex justify-between">
+                <span>Força:</span> <span class="text-white">${elem.power}</span>
+              </div>
+              <div class="bg-black/40 p-2 rounded-xl flex justify-between">
+                <span>Reatividade:</span> <span class="text-white">${elem.reactivity}%</span>
+              </div>
+              <div class="bg-black/40 p-2 rounded-xl flex justify-between">
+                <span>Massa:</span> <span class="text-white">${elem.mass} u</span>
+              </div>
+            </div>
+          </div>
+        `;
       }
     }
 
-    function playStatRound(statKey) {
-      if (roundWaiting) return;
-      roundWaiting = true;
+    function playBattleStat(statKey) {
+      if (isRoundLocked) return;
+      isRoundLocked = true;
       playSound('attack');
 
-      // Reveal bot card
-      renderBotBattleCard(currentRoundBotCard);
+      renderBotBattleCard(true);
 
-      const userVal = currentRoundUserCard[statKey];
-      const botVal = currentRoundBotCard[statKey];
+      const pVal = currentRoundPlayer[statKey];
+      const bVal = currentRoundBot[statKey];
 
-      const announcement = document.getElementById('battle-announcement');
-      const title = document.getElementById('battle-announcement-text');
-      const sub = document.getElementById('battle-announcement-sub');
+      const resultBox = document.getElementById('battle-round-result');
+      const title = document.getElementById('battle-result-title');
+      const desc = document.getElementById('battle-result-desc');
 
-      announcement.classList.remove('hidden');
+      resultBox.classList.remove('hidden');
 
-      let statName = 'Atributo';
-      if (statKey === 'atomicNumber') statName = 'Número Atômico (Z)';
-      if (statKey === 'power') statName = 'Força Elementar';
-      if (statKey === 'reactivity') statName = 'Reatividade';
-      if (statKey === 'density') statName = 'Densidade';
-
-      if (userVal > botVal) {
+      if (pVal > bVal) {
         playSound('correct');
-        userScore++;
-        addScore(50);
+        pScore++;
+        addGlobalScore(100);
         title.innerHTML = `🏆 Vitória na Rodada!`;
         title.className = "text-xl font-game text-emerald-400";
-        sub.innerHTML = `Seu <b>${currentRoundUserCard.name}</b> (${userVal}) superou o <b>${currentRoundBotCard.name}</b> (${botVal}) em ${statName}!`;
-      } else if (botVal > userVal) {
+        desc.innerHTML = `Seu <b>${currentRoundPlayer.name}</b> (${pVal}) superou o <b>${currentRoundBot.name}</b> (${bVal}) do Dr. Rutherford!`;
+      } else if (bVal > pVal) {
         playSound('wrong');
-        botScore++;
+        bScore++;
         title.innerHTML = `💥 Derrota na Rodada!`;
         title.className = "text-xl font-game text-rose-400";
-        sub.innerHTML = `O <b>${currentRoundBotCard.name}</b> (${botVal}) do Rival superou seu <b>${currentRoundUserCard.name}</b> (${userVal}) em ${statName}!`;
+        desc.innerHTML = `O <b>${currentRoundBot.name}</b> (${bVal}) do Dr. Rutherford superou seu <b>${currentRoundPlayer.name}</b> (${pVal})!`;
       } else {
         title.innerHTML = `⚖️ Empate Químico!`;
-        title.className = "text-xl font-game text-yellow-400";
-        sub.innerHTML = `Ambos empataram com o mesmo valor de ${statName} (${userVal})!`;
+        title.className = "text-xl font-game text-amber-400";
+        desc.innerHTML = `Ambos os elementos empataram com o valor de ${pVal}!`;
       }
 
-      document.getElementById('battle-user-score').innerText = userScore;
-      document.getElementById('battle-bot-score').innerText = botScore;
+      document.getElementById('battle-player-score').innerText = pScore;
+      document.getElementById('battle-bot-score').innerText = bScore;
     }
 
-    function nextBattleRound() {
+    function nextBattleTurn() {
       playSound('click');
-      loadNextBattleCards();
+      loadBattleTurn();
     }
 
-    function endBattleGame() {
-      const announcement = document.getElementById('battle-announcement');
-      const title = document.getElementById('battle-announcement-text');
-      const sub = document.getElementById('battle-announcement-sub');
-      const nextBtn = document.getElementById('battle-next-btn');
+    function finishBattleGame() {
+      const resultBox = document.getElementById('battle-round-result');
+      const title = document.getElementById('battle-result-title');
+      const desc = document.getElementById('battle-result-desc');
+      const btn = document.getElementById('battle-next-btn');
 
-      announcement.classList.remove('hidden');
-      if (userScore > botScore) {
-        playSound('correct');
-        title.innerHTML = `🎉 VOCÊ VENCEU O TORNEIO DOS ELEMENTOS!`;
+      resultBox.classList.remove('hidden');
+
+      if (pScore > bScore) {
+        playSound('fanfare');
+        title.innerHTML = `🎉 VOCÊ VENCEU O GRANDE TORNEIO!`;
         title.className = "text-2xl font-game text-emerald-400";
-        sub.innerHTML = `Placar final: Você ${userScore} x ${botScore} Rival. Você domina a química!`;
-      } else if (botScore > userScore) {
+        desc.innerHTML = `Placar final: Você ${pScore} x ${bScore} Dr. Rutherford. Você é um Mestre Químico!`;
+      } else if (bScore > pScore) {
         playSound('wrong');
-        title.innerHTML = `💀 O RIVAL VENCEU O TORNEIO!`;
+        title.innerHTML = `💀 VITÓRIA DO DR. RUTHERFORD!`;
         title.className = "text-2xl font-game text-rose-400";
-        sub.innerHTML = `Placar final: Rival ${botScore} x ${userScore} Você. Tente novamente!`;
+        desc.innerHTML = `Placar final: Dr. Rutherford ${bScore} x ${pScore} Você. Estude a tabela e tente novamente!`;
       } else {
-        title.innerHTML = `🤝 GRANDE EMPATE NA ARENA!`;
+        title.innerHTML = `🤝 EMPATE ÉPICO!`;
         title.className = "text-2xl font-game text-amber-400";
-        sub.innerHTML = `Placar empatado em ${userScore} x ${botScore}.`;
+        desc.innerHTML = `Placar final empatado em ${pScore} x ${bScore}.`;
       }
 
-      nextBtn.innerHTML = `<i class="fa-solid fa-rotate-right mr-1"></i> Jogar Nova Batalha`;
-      nextBtn.onclick = () => initBattleMode();
+      btn.innerHTML = `<i class="fa-solid fa-rotate-right mr-1"></i> Nova Batalha (5 Novas Cartas)`;
+      btn.onclick = () => initBattle();
     }
 
-    // ==========================================
-    // 4. QUEM É ESSE POKÉ-ELEMENTO? (QUIZ)
-    // ==========================================
-    let currentQuizElem = null;
-    let quizStreak = 0;
-    let quizLocked = false;
+    // ==============================================================
+    // 4. QUEM É ESSE ELEMENTO? (SILHUETA QUIZ)
+    // ==============================================================
+    let quizTarget = null;
+    let quizTimerInterval = null;
+    let quizTimeLeft = 15;
+    let quizStreakCount = 0;
+    let isQuizLocked = false;
 
-    function startNewQuizQuestion() {
-      quizLocked = false;
-      const feedback = document.getElementById('quiz-feedback');
-      feedback.classList.add('hidden');
+    function startQuizRound() {
+      isQuizLocked = false;
+      clearInterval(quizTimerInterval);
+      quizTimeLeft = 15;
+      document.getElementById('quiz-timer').innerText = `${quizTimeLeft}s`;
+      document.getElementById('quiz-feedback').classList.add('hidden');
 
-      // Pick a random element
-      const randomIndex = Math.floor(Math.random() * ELEMENTS_DATABASE.length);
-      currentQuizElem = ELEMENTS_DATABASE[randomIndex];
+      // Escolhe 1 dos 118 elementos aleatoriamente
+      quizTarget = ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
 
-      // Draw Silhouette
-      const creatureBox = document.getElementById('quiz-creature-container');
-      const statusBadge = document.getElementById('quiz-status-badge');
-      if (creatureBox) {
-        creatureBox.innerHTML = getElementArtwork(currentQuizElem.svgType, 160, true);
-      }
-      if (statusBadge) {
-        statusBadge.innerText = 'Quem é esse Pokémon Químico?';
-        statusBadge.className = 'mt-4 text-xs font-bold px-4 py-1.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
-      }
+      // Desenha Silhueta Escura
+      document.getElementById('quiz-creature').innerHTML = getCreatureSVG(quizTarget, 160, true);
+      const statusBadge = document.getElementById('quiz-status');
+      statusBadge.innerText = 'Quem é esse Pokémon Químico?';
+      statusBadge.className = 'mt-4 text-xs font-black px-4 py-1.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700';
 
-      // Pick 3 Clues
-      const cluesList = document.getElementById('quiz-clues-list');
-      const shuffledClues = shuffle(currentQuizElem.clues).slice(0, 3);
-      if (cluesList) {
-        cluesList.innerHTML = shuffledClues.map(c => `
-          <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-xl border border-white/5">
-            <i class="fa-solid fa-circle-check text-cyan-400 text-xs"></i>
-            <span>${c}</span>
-          </li>
-        `).join('');
-      }
+      // 3 Pistas
+      const cluesContainer = document.getElementById('quiz-clues');
+      cluesContainer.innerHTML = `
+        <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-xl border border-white/5">
+          <i class="fa-solid fa-atom text-amber-400 text-xs"></i>
+          <span><b>Bloco Quântico:</b> Pertence ao <b>Bloco ${quizTarget.block.toUpperCase()}</b> da Tabela Periódica.</span>
+        </li>
+        <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-xl border border-white/5">
+          <i class="fa-solid fa-users text-cyan-400 text-xs"></i>
+          <span><b>Família:</b> Classificado como <b>${quizTarget.family}</b> (Período ${quizTarget.period}).</span>
+        </li>
+        <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-xl border border-white/5">
+          <i class="fa-solid fa-lightbulb text-emerald-400 text-xs"></i>
+          <span><b>Aplicação:</b> ${quizTarget.trivia}</span>
+        </li>
+      `;
 
-      // Pick 4 Options (1 correct + 3 wrong)
-      const wrongOptions = ELEMENTS_DATABASE.filter(e => e.id !== currentQuizElem.id);
-      const chosenWrongs = shuffle(wrongOptions).slice(0, 3);
-      const allChoices = shuffle([currentQuizElem, ...chosenWrongs]);
+      // 4 Opções (1 correta + 3 erradas)
+      const wrongList = ELEMENTS.filter(e => e.z !== quizTarget.z).sort(() => Math.random() - 0.5).slice(0, 3);
+      const allChoices = [quizTarget, ...wrongList].sort(() => Math.random() - 0.5);
 
-      const optionsGrid = document.getElementById('quiz-options-grid');
-      if (optionsGrid) {
-        optionsGrid.innerHTML = allChoices.map(choice => `
-          <button onclick="handleQuizAnswer('${choice.id}')" class="quiz-option-btn p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center gap-3 transition transform active:scale-95 text-left font-bold text-sm">
-            <span class="w-8 h-8 rounded-xl bg-slate-900 flex items-center justify-center text-xs font-black text-amber-400 border border-slate-700">${choice.symbol}</span>
-            <span class="text-white">${choice.name}</span>
-          </button>
-        `).join('');
-      }
+      const optionsBox = document.getElementById('quiz-options');
+      optionsBox.innerHTML = allChoices.map(opt => `
+        <button onclick="handleQuizAnswer(${opt.z})" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center gap-3 transition transform active:scale-95 text-left font-bold text-xs sm:text-sm">
+          <span class="w-8 h-8 rounded-xl bg-slate-950 flex items-center justify-center text-xs font-black text-amber-400 border border-slate-700">${opt.sym}</span>
+          <span class="text-white">${opt.name} (Z=${opt.z})</span>
+        </button>
+      `).join('');
+
+      // Inicia Cronômetro
+      quizTimerInterval = setInterval(() => {
+        quizTimeLeft--;
+        document.getElementById('quiz-timer').innerText = `${quizTimeLeft}s`;
+        if (quizTimeLeft <= 0) {
+          clearInterval(quizTimerInterval);
+          handleQuizAnswer(-1); // Tempo esgotado
+        }
+      }, 1000);
     }
 
-    function handleQuizAnswer(selectedId) {
-      if (quizLocked) return;
-      quizLocked = true;
+    function handleQuizAnswer(selectedZ) {
+      if (isQuizLocked) return;
+      isQuizLocked = true;
+      clearInterval(quizTimerInterval);
 
-      const creatureBox = document.getElementById('quiz-creature-container');
-      const statusBadge = document.getElementById('quiz-status-badge');
+      // Revela criatura colorida
+      document.getElementById('quiz-creature').innerHTML = getCreatureSVG(quizTarget, 160, false);
+
       const feedback = document.getElementById('quiz-feedback');
+      const statusBadge = document.getElementById('quiz-status');
       const streakEl = document.getElementById('quiz-streak');
 
-      // Reveal creature in full vibrant color!
-      creatureBox.innerHTML = getElementArtwork(currentQuizElem.svgType, 160, false);
-
-      if (selectedId === currentQuizElem.id) {
+      if (selectedZ === quizTarget.z) {
         playSound('correct');
-        quizStreak++;
-        addScore(150);
-        streakEl.innerText = `${quizStreak} 🔥`;
-        statusBadge.innerText = `Correto! É o ${currentQuizElem.name} (${currentQuizElem.symbol})!`;
-        statusBadge.className = 'mt-4 text-xs font-bold px-4 py-1.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500';
+        quizStreakCount++;
+        addGlobalScore(150);
+        streakEl.innerText = `${quizStreakCount} 🔥`;
 
-        feedback.className = 'p-3 rounded-xl text-center text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-300';
-        feedback.innerHTML = `Mandou bem! +150 pontos! Próxima pergunta em instantes...`;
+        statusBadge.innerText = `Correto! É o ${quizTarget.name} (${quizTarget.sym})!`;
+        statusBadge.className = 'mt-4 text-xs font-black px-4 py-1.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500';
+
+        feedback.className = 'p-3 rounded-2xl text-center text-xs sm:text-sm font-black bg-emerald-950/80 border border-emerald-500/50 text-emerald-300';
+        feedback.innerHTML = `Excelente raciocínio químico! +150 pontos! Próximo elemento em 3s...`;
         feedback.classList.remove('hidden');
       } else {
         playSound('wrong');
-        quizStreak = 0;
+        quizStreakCount = 0;
         streakEl.innerText = `0 🔥`;
-        statusBadge.innerText = `Ops! Na verdade era o ${currentQuizElem.name} (${currentQuizElem.symbol})!`;
-        statusBadge.className = 'mt-4 text-xs font-bold px-4 py-1.5 rounded-full bg-rose-950 text-rose-300 border border-rose-500';
 
-        feedback.className = 'p-3 rounded-xl text-center text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-300';
-        feedback.innerHTML = `Errou! A criatura correta era o <b>${currentQuizElem.name}</b>. Carregando próxima...`;
+        statusBadge.innerText = `Ops! Era o ${quizTarget.name} (${quizTarget.sym})!`;
+        statusBadge.className = 'mt-4 text-xs font-black px-4 py-1.5 rounded-full bg-rose-950 text-rose-300 border border-rose-500';
+
+        feedback.className = 'p-3 rounded-2xl text-center text-xs sm:text-sm font-black bg-rose-950/80 border border-rose-500/50 text-rose-300';
+        feedback.innerHTML = `Incorreto! O elemento correto era <b>${quizTarget.name} (${quizTarget.sym})</b>. Carregando próximo...`;
         feedback.classList.remove('hidden');
       }
 
       setTimeout(() => {
-        startNewQuizQuestion();
-      }, 2500);
+        startQuizRound();
+      }, 3000);
     }
 
-    // Window load trigger
+    // Inicialização da Aplicação
     window.onload = function() {
-      renderAlbum();
+      renderDex();
     };
   </script>
 </body>
